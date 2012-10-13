@@ -9,5 +9,7 @@
         <div class="bar" style="width: <%= @tome.send(character_attribute) || Tome::DEFAULTS[:attribute] %>%;"></div>
       </div>
     </div>
+
+    <%= render :partial => "edit_button" %>
   </div>
 </div>

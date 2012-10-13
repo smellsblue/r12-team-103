@@ -1,17 +1,23 @@
 <div class="page-header">
   <div class="row-fluid">
-    <h5 class="span4 tome-item level-and-profession"><%= @tome.level.ordinalize %> level <%= @tome.profession || Tome::DEFAULTS[:profession] %></h5>
+    <h5 class="span4 tome-item level-and-profession">
+      <%= @tome.level.ordinalize %> level <%= @tome.profession || Tome::DEFAULTS[:profession] %>
+      <%= render :partial => "edit_button" %>
+    </h5>
   </div>
 
   <div class="row-fluid">
-    <h1 class="span8 tome-item character-name"><%= @tome.name || Tome::DEFAULTS[:name] %></h1>
+    <h1 class="span8 tome-item character-name">
+      <%= @tome.name || Tome::DEFAULTS[:name] %>
+      <%= render :partial => "edit_button" %>
+    </h1>
   </div>
 
-  <div class="row-fluid">
-    <% if @tome.owner.name %>
+  <% if @tome.owner.name %>
+    <div class="row-fluid">
       <h5 class="aka-name">AKA <%= @tome.owner.name %></h5>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 </div>
 
 <div class="form-horizontal row-fluid character-attributes">
