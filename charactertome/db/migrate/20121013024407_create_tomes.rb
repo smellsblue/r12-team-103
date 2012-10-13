@@ -5,7 +5,6 @@ class CreateTomes < ActiveRecord::Migration
       t.integer :level, :default => 1, :null => false
       t.string :profession
       t.string :name
-      t.string :real_name
       t.integer :intelligence
       t.integer :charisma
       t.integer :strength
