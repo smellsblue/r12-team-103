@@ -17,6 +17,7 @@ Other Gems:
 * uglifier
 
 Production Tools:
+* google analytics
 * mysql
 
 Other Tools:
