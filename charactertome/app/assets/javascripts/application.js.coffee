@@ -41,18 +41,21 @@ $.checkLevel = (server_result) ->
         $(".character-level").text server_result.new_level_label
     if server_result.levels_gained?
         if server_result.levels_gained == 1
-            $(".character-level").gain "+#{server_result.levels_gained} level"
+            $(".character-level").gain "+#{server_result.levels_gained}&nbsp;level"
         else if server_result.levels_gained > 1
-            $(".character-level").gain "+#{server_result.levels_gained} levels"
+            $(".character-level").gain "+#{server_result.levels_gained}&nbsp;levels"
 
 $.checkXp = (server_result) ->
     if server_result.new_xp_total?
         $(".character-xp").text "#{server_result.new_xp_total} xp"
     if server_result.xp_gained? && server_result.xp_gained > 0
-        $(".character-xp").gain "+#{server_result.xp_gained} xp"
+        $(".character-xp").gain "+#{server_result.xp_gained}&nbsp;xp"
 
 $ ->
     if $.canEdit()
+        $(".tome-item").click ->
+            $(".tome-item-clicked").removeClass "tome-item-clicked"
+            $(@).addClass "tome-item-clicked"
         $("a.edit-tome-item").each ->
             target = $(@).data "for"
             $target = $ "##{target}-value"

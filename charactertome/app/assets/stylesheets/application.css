@@ -24,7 +24,8 @@
     display: none;
 }
 
-.can-edit-true .tome-item:hover {
+.can-edit-true .tome-item:hover,
+.can-edit-true .tome-item-clicked {
     padding: 2px;
     background-color: #fdfdfd;
     border: 1px solid #e3e3e3;
@@ -36,7 +37,8 @@
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
-.can-edit-true .tome-item:hover .edit-tome-item {
+.can-edit-true .tome-item:hover .edit-tome-item,
+.can-edit-true .tome-item-clicked .edit-tome-item {
     display: inline-block;
     *display: inline;
     /* IE7 inline-block hack */
