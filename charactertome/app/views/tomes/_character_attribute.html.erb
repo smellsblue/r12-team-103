@@ -1,0 +1,6 @@
+<dt><%= character_attribute.to_s.capitalize %>:</dt>
+<dd class="span3 character-attribute">
+  <div class="progress">
+    <div class="bar" style="width: <%= @tome.send(character_attribute) || Tome::DEFAULTS[:attribute] %>%;"></div>
+  </div>
+</dd>

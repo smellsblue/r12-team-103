@@ -1,0 +1,23 @@
+Production Gems:
+* jquery-rails
+* mysql2
+* nginxtra
+* passenger
+* rails
+* twitter-bootstrap-rails
+
+Other Gems:
+* coffee-rails
+* factory_girl_rails
+* rspec-rails
+* sass-rails
+* sqlite3-ruby
+* therubyracer
+* turn
+* uglifier
+
+Production Tools:
+* mysql
+
+Other Tools:
+* emacs
