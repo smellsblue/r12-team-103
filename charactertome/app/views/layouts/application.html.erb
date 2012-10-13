@@ -35,7 +35,6 @@
     <%= favicon_link_tag 'images/favicon.ico', :rel => 'shortcut icon' %>
   </head>
   <body>
-
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -44,14 +43,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Charactertome</a>
+          <a class="brand" href="/">Character Tome</a>
           <div class="container-fluid nav-collapse">
             <ul class="nav">
-              <li><%= link_to "Link1", "/path1"  %></li>
-              <li><%= link_to "Link2", "/path2"  %></li>
-              <li><%= link_to "Link3", "/path3"  %></li>
+              <li><a href="/path">Link</a></li>
             </ul>
-          </div><!--/.nav-collapse -->
+          </div>
         </div>
       </div>
     </div>
@@ -62,28 +59,20 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Sidebar</li>
-              <li><%= link_to "Link1", "/path1"  %></li>
-              <li><%= link_to "Link2", "/path2"  %></li>
-              <li><%= link_to "Link3", "/path3"  %></li>
+              <li><a href="/path">Link</a></li>
             </ul>
-          </div><!--/.well -->
-        </div><!--/span-->
-        <div class="span9">
+          </div>
+        </div>
+        <div class="span12">
           <%= bootstrap_flash %>
           <%= yield %>
         </div>
-      </div><!--/row-->
+      </div>
 
       <footer>
-        <p>&copy; Company 2012</p>
+        <p>&copy; Mike Virata-Stone 2012</p>
       </footer>
-
-    </div> <!-- /container -->
-
-    <!-- Javascripts
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    </div>
     <%= javascript_include_tag "application" %>
-
   </body>
 </html>
