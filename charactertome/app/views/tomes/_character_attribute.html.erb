@@ -4,12 +4,12 @@
       <strong><%= character_attribute.to_s.capitalize %>:</strong>
     </label>
 
-    <div class="character-attribute-value">
+    <div class="controls character-attribute-value">
       <div class="progress">
         <div id="<%= character_attribute %>-value" class="bar" style="width: <%= @tome.value_of character_attribute, :attribute %>%;" data-original-value="<%= @tome.send character_attribute %>"></div>
       </div>
-    </div>
 
-    <%= render :partial => "edit_button", :object => character_attribute %>
+      <%= render :partial => "edit_button", :object => character_attribute %>
+    </div>
   </div>
 </div>

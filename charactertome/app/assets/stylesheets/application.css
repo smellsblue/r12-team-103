@@ -47,6 +47,8 @@
 .character-alignment .edit-tome-item {
     margin-top: -40px;
     float: right;
+    position: relative;
+    z-index: 200;
 }
 
 .form-horizontal .character-attribute .control-group,

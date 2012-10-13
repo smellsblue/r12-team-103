@@ -24,7 +24,7 @@ $.fn.gain = (message) ->
         </div>"
     location = @.offset()
     $gain.css
-        position: "absolute"
+        position: "fixed"
         "z-index": 1000
         left: location.left
         top: location.top
