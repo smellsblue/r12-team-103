@@ -8,8 +8,6 @@ class TomesController < ApplicationController
 
   def show
     @tome = Tome.find params[:id]
-  rescue
-    redirect_to "/tomes/me"
   end
 
   def update
