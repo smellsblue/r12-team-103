@@ -10,6 +10,9 @@ class Tome < ActiveRecord::Base
     :profession => "Nerdist"
   }.freeze
 
+  def update_value(params)
+  end
+
   def morality_label
     return nil unless morality
 

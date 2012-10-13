@@ -1,15 +1,17 @@
+<input id="tome_id" type="hidden" value="<%= @tome.id %>" />
+
 <div class="page-header">
   <div class="row-fluid">
     <h5 class="span4 tome-item level-and-profession">
-      <%= @tome.level.ordinalize %> level <%= @tome.profession || Tome::DEFAULTS[:profession] %>
-      <%= render :partial => "edit_button" %>
+      <%= @tome.level.ordinalize %> level <span id="profession-value" data-original-value="<%= @tome.profession %>" data-input-placeholder="<%= Tome::DEFAULTS[:profession] %>"><%= @tome.profession || Tome::DEFAULTS[:profession] %></span>
+      <%= render :partial => "edit_button", :object => :profession %>
     </h5>
   </div>
 
   <div class="row-fluid">
     <h1 class="span8 tome-item character-name">
-      <%= @tome.name || Tome::DEFAULTS[:name] %>
-      <%= render :partial => "edit_button" %>
+      <span id="name-value" data-original-value="<%= @tome.name %>" data-input-placeholder="<%= Tome::DEFAULTS[:name] %>"><%= @tome.name || Tome::DEFAULTS[:name] %></span>
+      <%= render :partial => "edit_button", :object => :name %>
     </h1>
   </div>
 

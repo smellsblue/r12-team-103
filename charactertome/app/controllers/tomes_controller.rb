@@ -8,6 +8,15 @@ class TomesController < ApplicationController
 
   def show
     @tome = Tome.find params[:id]
+  rescue
+    redirect_to "/tomes/me"
+  end
+
+  def update
+    tome = Tome.find params[:id]
+    raise "You do not have permission!" if session[:user_id].to_i != tome.owner.id
+    tome.update_value params
+    render :text => "success"
   end
 
   private

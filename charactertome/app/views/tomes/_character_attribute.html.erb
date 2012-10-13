@@ -6,10 +6,10 @@
 
     <div class="character-attribute-value">
       <div class="progress">
-        <div class="bar" style="width: <%= @tome.send(character_attribute) || Tome::DEFAULTS[:attribute] %>%;"></div>
+        <div id="<%= character_attribute %>-value" class="bar" style="width: <%= @tome.send(character_attribute) || Tome::DEFAULTS[:attribute] %>%;" data-original-value="<%= @tome.send character_attribute %>"></div>
       </div>
     </div>
 
-    <%= render :partial => "edit_button" %>
+    <%= render :partial => "edit_button", :object => character_attribute %>
   </div>
 </div>
