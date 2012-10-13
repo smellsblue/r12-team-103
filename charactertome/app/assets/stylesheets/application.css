@@ -50,3 +50,9 @@
 .form-horizontal .character-attribute .control-group {
     margin-bottom: 0px;
 }
+
+form.tome-edit-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
