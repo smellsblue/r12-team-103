@@ -1,6 +1,13 @@
-<dt><%= character_attribute.to_s.capitalize %>:</dt>
-<dd class="span3 character-attribute">
-  <div class="progress">
-    <div class="bar" style="width: <%= @tome.send(character_attribute) || Tome::DEFAULTS[:attribute] %>%;"></div>
+<div class="row-fluid character-attribute">
+  <div class="control-group span5 tome-item">
+    <label class="control-label character-attribute-label">
+      <strong><%= character_attribute.to_s.capitalize %>:</strong>
+    </label>
+
+    <div class="character-attribute-value">
+      <div class="progress">
+        <div class="bar" style="width: <%= @tome.send(character_attribute) || Tome::DEFAULTS[:attribute] %>%;"></div>
+      </div>
+    </div>
   </div>
-</dd>
+</div>

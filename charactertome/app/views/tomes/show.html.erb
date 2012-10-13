@@ -1,20 +1,27 @@
 <div class="page-header">
-  <h5 class="level-and-profession"><%= @tome.level.ordinalize %> level <%= @tome.profession || Tome::DEFAULTS[:profession] %></h5>
-  <h1 class="character-name"><%= @tome.name || Tome::DEFAULTS[:name] %></h1>
+  <div class="row-fluid">
+    <h5 class="span4 tome-item level-and-profession"><%= @tome.level.ordinalize %> level <%= @tome.profession || Tome::DEFAULTS[:profession] %></h5>
+  </div>
 
-  <% if @tome.owner.name %>
-    <h5 class="aka-name">AKA <%= @tome.owner.name %></h5>
-  <% end %>
+  <div class="row-fluid">
+    <h1 class="span8 tome-item character-name"><%= @tome.name || Tome::DEFAULTS[:name] %></h1>
+  </div>
+
+  <div class="row-fluid">
+    <% if @tome.owner.name %>
+      <h5 class="aka-name">AKA <%= @tome.owner.name %></h5>
+    <% end %>
+  </div>
 </div>
 
-<dl class="dl-horizontal row-fluid character-attributes">
+<div class="form-horizontal row-fluid character-attributes">
   <%= render :partial => "character_attribute", :object => :intelligence %>
   <%= render :partial => "character_attribute", :object => :charisma %>
   <%= render :partial => "character_attribute", :object => :strength %>
   <%= render :partial => "character_attribute", :object => :wisdom %>
   <%= render :partial => "character_attribute", :object => :will %>
   <%= render :partial => "character_attribute", :object => :confidence %>
-</dl>
+</div>
 
 <hr />
 
