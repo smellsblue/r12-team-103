@@ -1,6 +1,15 @@
-<dt><%= @tome.value_of "#{character_alignment}_label", :alignment_label %></td>
-<dd class="span5 character-alignment">
-  <div class="progress">
-    <div class="bar" style="width: <%= @tome.value_of character_alignment, :alignment %>%;"></div>
+<div class="row-fluid character-alignment">
+  <div class="control-group span5 tome-item">
+    <label class="control-label character-alignment-label">
+      <strong><%= @tome.value_of "#{character_alignment}_label", :alignment_label %></strong>
+    </label>
+
+    <div class="character-alignment-value">
+      <div class="progress">
+        <div id="<%= character_alignment %>-value" class="bar" style="width: <%= @tome.value_of character_alignment, :alignment %>%;" data-original-value="<%= @tome.send character_alignment %>"></div>
+      </div>
+    </div>
+
+    <%= render :partial => "edit_button", :object => character_alignment %>
   </div>
-</dd>
+</div>
