@@ -8,6 +8,7 @@ Production Gems:
 
 Other Gems:
 * coffee-rails
+* factory_girl_rails
 * rspec-rails
 * sass-rails
 * sqlite3-ruby
