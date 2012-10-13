@@ -1,0 +1,6 @@
+<dt><%= @tome.send("#{character_alignment}_label") || Tome::DEFAULTS[:alignment_label] %></td>
+<dd class="span5 character-alignment">
+  <div class="progress">
+    <div class="bar" style="width: <%= @tome.send(character_alignment) || Tome::DEFAULTS[:alignment] %>%;"></div>
+  </div>
+</dd>
