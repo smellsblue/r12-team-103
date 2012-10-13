@@ -51,6 +51,24 @@ $.checkXp = (server_result) ->
     if server_result.xp_gained? && server_result.xp_gained > 0
         $(".character-xp").gain "+#{server_result.xp_gained}&nbsp;xp"
 
+$.showError = (message) ->
+    $modal = $ "<div class='modal hide fade'>
+          <div class='modal-header'>
+            <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+            <h3>An Error Occurred</h3>
+          </div>
+          <div class='modal-body'>
+            <p>#{message}</p>
+          </div>
+          <div class='modal-footer'>
+            <button data-dismiss='modal' class='btn' aria-hidden='true'>Dismiss</button>
+          </div>
+        </div>"
+    $("body").append $modal
+    $modal.on "hidden", ->
+        $modal.remove()
+    $modal.modal()
+
 $ ->
     if $.canEdit()
         $(".tome-item").click ->
@@ -66,7 +84,6 @@ $ ->
                   <input type='text' name='value' placeholder='#{placeholder}' />
                 </form>"
             $input = $form.find "input[name='value']"
-            $input.val $target.data("original-value")
             $form.submit ->
                 $.ajax "/tomes/#{$("#tome_id").val()}",
                     type: "POST"
@@ -74,18 +91,23 @@ $ ->
                     success: (result) ->
                         if result.new_value?.length
                             $target.text result.new_value
+                            $target.attr "data-original-value", result.new_value
                         else
                             $target.text placeholder
+                            $target.attr "data-original-value", ""
                         $form.hide()
                         $target.show()
                         $.checkLevel result
                         $.checkXp result
                     error: ->
-                        # TODO
+                        $form.hide()
+                        $target.show()
+                        $.showError "Drat, something went wrong!"
                 false
             $target.after $form
             $(@).click ->
                 $target.hide()
+                $input.val $target.attr("data-original-value")
                 $form.show()
                 $input.focus()
                 false
