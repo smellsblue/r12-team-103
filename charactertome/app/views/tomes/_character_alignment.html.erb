@@ -6,7 +6,10 @@
 
     <div class="character-alignment-value">
       <div class="progress">
-        <div id="<%= character_alignment %>-value" class="bar" style="width: <%= @tome.value_of character_alignment, :alignment %>%;" data-original-value="<%= @tome.send character_alignment %>"></div>
+        <div id="<%= character_alignment %>-value" class="bar-marker" style="width: <%= @tome.value_of character_alignment, :alignment %>%;" data-original-value="<%= @tome.send character_alignment %>"></div>
+        <div class="bar bar-danger" style="width: 33.3%;"></div>
+        <div class="bar bar-warning" style="width: 33.3%;"></div>
+        <div class="bar bar-success" style="width: 33.4%;"></div>
       </div>
     </div>
 

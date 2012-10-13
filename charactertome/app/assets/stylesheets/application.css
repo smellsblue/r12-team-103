@@ -59,3 +59,19 @@ form.tome-edit-form {
     margin: 0;
     padding: 0;
 }
+
+.character-alignment .character-alignment-value .progress {
+    position: relative;
+}
+
+.progress .bar-marker {
+    width: 0%;
+    height: 20px;
+    float: left;
+    font-size: 12px;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    position: absolute;
+    z-index: 100;
+    border-right: 1px solid #000;
+}
