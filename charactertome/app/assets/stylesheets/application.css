@@ -54,6 +54,11 @@
     margin-bottom: 0px;
 }
 
+.form-horizontal .character-attribute .control-label,
+.form-horizontal .character-alignment .control-label {
+    margin-top: -5px;
+}
+
 form.tome-edit-form {
     display: inline;
     margin: 0;
