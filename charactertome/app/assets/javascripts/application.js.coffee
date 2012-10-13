@@ -14,3 +14,34 @@
 #= require jquery_ujs
 #= require twitter/bootstrap
 #= require_tree .
+$ ->
+    $("a.edit-tome-item").each ->
+        target = $(@).data "for"
+        $target = $ "##{target}-value"
+        placeholder = $target.data "input-placeholder"
+        form = $ "<form class='tome-edit-form' id='form-for-#{target}' style='display: none;'>
+              <input type='hidden' name='_method' value='PUT' />
+              <input type='hidden' name='attribute' value='#{target}' />
+              <input type='text' name='value' placeholder='#{placeholder}' />
+            </form>"
+        $input = form.find "input[name='#{target}']"
+        $input.val $target.data("original-value")
+        form.submit ->
+            $.ajax "/tomes/#{$("#tome_id").val()}",
+                type: "POST"
+                data: $(@).serialize()
+                success: (result) ->
+                    if result.new_value?.length
+                        $target.text result.new_value
+                    else
+                        $target.text placeholder
+                    form.hide()
+                    $target.show()
+                error: ->
+                    # TODO
+            false
+        $target.after form
+    $("a.edit-tome-item").click ->
+        $("##{$(@).data("for")}-value").hide()
+        $("#form-for-#{$(@).data("for")}").show()
+        false

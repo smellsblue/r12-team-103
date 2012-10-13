@@ -10,6 +10,29 @@ class Tome < ActiveRecord::Base
     :profession => "Nerdist"
   }.freeze
 
+  def value_of(attr, default_key = nil)
+    result = send attr
+    result = Tome::DEFAULTS[default_key || attr.to_sym] if result.blank?
+    result
+  end
+
+  def update_value!(params)
+    value = params[:value]
+    value = nil if params[:value].blank?
+
+    case params[:attribute]
+    when "profession"
+      value = self.profession = value || profession
+    when "name"
+      value = self.name = value || name
+    else
+      raise "Not allowed to update #{params[:attribute]}"
+    end
+
+    save!
+    { :new_value => value }
+  end
+
   def morality_label
     return nil unless morality
 
