@@ -4,6 +4,7 @@ Production Gems:
 * nginxtra
 * passenger
 * rails
+* twitter-bootstrap-rails
 
 Other Gems:
 * coffee-rails
