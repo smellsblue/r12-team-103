@@ -75,7 +75,7 @@ class Tome < ActiveRecord::Base
       levels_gained = 0
     end
 
-    result = { :new_value => value, :xp_gained => xp_gained, :new_xp_total => xp_total, :levels_gained => levels_gained, :new_level => level }
+    result = { :new_value => value, :xp_gained => xp_gained, :new_xp_total => xp_total, :levels_gained => levels_gained, :new_level => level, :new_level_label => level.ordinalize }
   end
 
   def morality_label
