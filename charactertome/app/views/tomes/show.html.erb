@@ -1,12 +1,19 @@
 <div class="page-header">
-  <h1>This is an example header</h1>
+  <h5 class="level-and-profession"><%= @tome.level.ordinalize %> level <%= @tome.profession || Tome::DEFAULTS[:profession] %></h5>
+  <h1 class="character-name"><%= @tome.name || Tome::DEFAULTS[:name] %></h1>
+
+  <% if @tome.owner.name %>
+    <h5 class="aka-name"><%= @tome.owner.name %></h5>
+  <% end %>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong>Example DT:</strong></dt>
-  <dd>DD Value</dd>
-  <dt><strong>Example DT 2:</strong></dt>
-  <dd>DD Value 2</dd>
+<dl class="dl-horizontal character-attributes row-fluid">
+  <%= render :partial => "character_attribute", :object => :intelligence %>
+  <%= render :partial => "character_attribute", :object => :charisma %>
+  <%= render :partial => "character_attribute", :object => :strength %>
+  <%= render :partial => "character_attribute", :object => :wisdom %>
+  <%= render :partial => "character_attribute", :object => :will %>
+  <%= render :partial => "character_attribute", :object => :confidence %>
 </dl>
 
 <div class="form-actions">

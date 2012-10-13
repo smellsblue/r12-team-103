@@ -7,6 +7,7 @@ class TomesController < ApplicationController
   end
 
   def show
+    @tome = Tome.find params[:id]
   end
 
   private
