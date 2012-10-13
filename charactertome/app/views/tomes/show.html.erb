@@ -8,6 +8,9 @@
         <span class="character-level"><%= @tome.level.ordinalize %></span> level <span id="profession-value" data-original-value="<%= @tome.profession %>" data-input-placeholder="<%= Tome::DEFAULTS[:profession] %>"><%= @tome.value_of :profession %></span>
         <%= render :partial => "edit_button", :object => :profession %>
       </h5>
+      <h5 class="span1 xp-amount">
+        <span class="character-xp"><%= @tome.xp_total %> xp</span>
+      </h5>
     </div>
 
     <div class="row-fluid">

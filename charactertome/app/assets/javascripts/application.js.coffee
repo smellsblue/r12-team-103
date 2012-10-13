@@ -22,6 +22,10 @@ $.checkLevel = (server_result) ->
     if server_result.new_level_label?
         $(".character-level").text server_result.new_level_label
 
+$.checkXp = (server_result) ->
+    if server_result.new_xp_total?
+        $(".character-xp").text "#{server_result.new_xp_total} xp"
+
 $ ->
     if $.canEdit()
         $("a.edit-tome-item").each ->
@@ -47,6 +51,7 @@ $ ->
                         $form.hide()
                         $target.show()
                         $.checkLevel result
+                        $.checkXp result
                     error: ->
                         # TODO
                 false
