@@ -11,7 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121013025128) do
+ActiveRecord::Schema.define(:version => 20121013174229) do
+
+  create_table "experiences", :force => true do |t|
+    t.integer "tome_id",      :null => false
+    t.string  "label",        :null => false
+    t.integer "value",        :null => false
+    t.string  "source_type",  :null => false
+    t.integer "reference_id"
+  end
 
   create_table "tomes", :force => true do |t|
     t.integer  "owner_id",                             :null => false
