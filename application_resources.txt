@@ -21,3 +21,4 @@ Production Tools:
 
 Other Tools:
 * emacs
+* gimp
