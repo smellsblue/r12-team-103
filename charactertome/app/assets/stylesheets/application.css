@@ -11,6 +11,10 @@
  *= require_self
  *= require_tree .
  */
+footer .container-fluid {
+    padding: 15px;
+}
+
 .character-attribute-label,
 .character-alignment-label {
     margin-right: 15px;
