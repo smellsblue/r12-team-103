@@ -134,25 +134,27 @@ $.setupEdits = () ->
 
 $.setupNewGoal = () ->
     $(".create-goal").each ->
-        $form = $.createForm "POST", "
-            <input type='text' name='label' placeholder='a long-term goal' />"
-        $form.after "<br />"
-        $input = $form.find "input[name='label']"
-        $form.submit ->
-            $.ajax $("#create_goal_path").val(),
-                type: "POST"
-                data: $(@).serialize()
-                success: (result) ->
-                    $form.hide()
-                    $.standardChecks result
-                    $("#new-goals").append result.html if result.html?
-                error: ->
-                    $form.hide()
-                    $.showError "Drat, something went wrong!"
-            false
-        $(@).before $form
         $(@).click ->
-            $input.val ""
+            $form = $.createForm "POST", "
+                <input type='text' name='label' placeholder='a long-term goal' />"
+            $br = $ "<br />"
+            $form.after $br
+            $input = $form.find "input[name='label']"
+            $form.submit ->
+                $.ajax $("#create_goal_path").val(),
+                    type: "POST"
+                    data: $(@).serialize()
+                    success: (result) ->
+                        $form.remove()
+                        $br.remove()
+                        $.standardChecks result
+                        $("#new-goals").append result.html if result.html?
+                    error: ->
+                        $form.remove()
+                        $br.remove
+                        $.showError "Drat, something went wrong!"
+                false
+            $(@).before $form
             $form.show()
             $input.focus()
             false
