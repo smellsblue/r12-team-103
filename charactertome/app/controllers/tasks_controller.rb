@@ -19,7 +19,8 @@ class TasksController < ApplicationController
     raise "That is not the right task id!" if task.goal_id != goal.id
     result = @tome.update_task! task, params
     render :json => {
-      :task_completed_status => task.completed_status
+      :task_completed_status => task.completed_status,
+      :goal_completed_percent => goal.accomplished_percent
     }
   end
 end

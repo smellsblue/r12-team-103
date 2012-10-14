@@ -183,6 +183,7 @@ $.setupNewTask = () ->
 
 $.setupToggleTasks = () ->
     $(document).on "click", ".toggle-task", ->
+        goal_id = $(@).data "goal-id"
         task_id = $(@).data "task-id"
         $form = $.createForm "PUT", "
             <input type='hidden' name='toggle' value='true' />"
@@ -193,12 +194,17 @@ $.setupToggleTasks = () ->
             success: (result) ->
                 $form.remove()
                 $.standardChecks result
+
                 if result.task_completed_status == "completed"
                     $(".task-#{task_id}").removeClass("not_completed").addClass("completed")
                     $(".task-#{task_id}-btn").addClass("btn-success")
                 else if result.task_completed_status == "not_completed"
                     $(".task-#{task_id}").removeClass("completed").addClass("not_completed")
                     $(".task-#{task_id}-btn").removeClass("btn-success")
+
+                if result.goal_completed_percent?
+                    new_width = $(".goal-#{goal_id}-progress").width() * (result.goal_completed_percent / 100.0)
+                    $(".goal-#{goal_id}-progress .bar").stop().animate width: new_width
             error: ->
                 $form.remove()
                 $.showError "Drat, something went wrong!"
