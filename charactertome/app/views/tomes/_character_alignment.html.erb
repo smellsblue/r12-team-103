@@ -1,7 +1,7 @@
 <div class="row-fluid character-alignment">
   <div class="control-group span5 tome-item">
     <label class="control-label character-alignment-label">
-      <strong><%= @tome.value_of "#{character_alignment}_label", :alignment_label %></strong>
+      <strong id="character-<%= character_alignment %>-label"><%= @tome.value_of "#{character_alignment}_label", :alignment_label %></strong>
     </label>
 
     <div class="character-alignment-value">

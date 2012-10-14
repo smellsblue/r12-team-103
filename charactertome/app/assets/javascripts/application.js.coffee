@@ -39,6 +39,7 @@ $.fn.gain = (message) ->
 $.standardChecks = (server_result) ->
     $.checkLevel server_result
     $.checkXp server_result
+    $.checkAlignment server_result
     $.checkGoal server_result
     $.checkTask server_result
     $.checkWeapon server_result
@@ -57,6 +58,12 @@ $.checkXp = (server_result) ->
         $(".character-xp").text "#{server_result.new_xp_total} xp"
     if server_result.xp_gained? && server_result.xp_gained > 0
         $(".character-xp").gain "+#{server_result.xp_gained}&nbsp;xp"
+
+$.checkAlignment = (server_result) ->
+    if server_result.new_morality?
+        $("#character-morality-label").text server_result.new_morality
+    if server_result.new_ethics?
+        $("#character-ethics-label").text server_result.new_ethics
 
 $.checkGoal = (server_result) ->
     if server_result.goal_completed_percent? && server_result.goal_id?
@@ -158,6 +165,28 @@ $.setupEdits = () ->
         $target.after $form
         $form.show()
         $input.focus()
+        false
+
+$.setupBarControls = () ->
+    $(document).on "click", ".bar-control", ->
+        target = $(@).data "for"
+        $target = $ "##{target}-value"
+        $form = $.createForm "PUT", "
+            <input type='hidden' name='bar_attribute' value='#{target}' />
+            <input type='hidden' name='adjustment' value='#{$(@).data "control-type"}' />"
+        $target.after $form
+        $.ajax $("#edit_tome_path").val(),
+            type: "POST"
+            data: $form.serialize()
+            success: (result) ->
+                if result.new_value?
+                    new_width = $target.parents(".progress:first").width() * (result.new_value / 100.0)
+                    $target.stop().animate width: new_width, 100
+                $form.remove()
+                $.standardChecks result
+            error: ->
+                $form.remove()
+                $.showError "Drat, something went wrong!"
         false
 
 $.setupDeletes = () ->
@@ -324,6 +353,7 @@ $.setupEditWeapon = () ->
 $ ->
     if $.canEdit()
         $.setupEdits()
+        $.setupBarControls()
         $.setupDeletes()
         $.setupNewGoal()
         $.setupGoals()
