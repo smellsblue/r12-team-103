@@ -87,7 +87,7 @@ $.setupEdits = () ->
         wasClicked = $(@).is ".tome-item-clicked"
         $(".tome-item-clicked").removeClass "tome-item-clicked"
         $(@).addClass "tome-item-clicked" unless wasClicked
-    $("a.edit-tome-item").each ->
+    $(".edit-tome-item").each ->
         target = $(@).data "for"
         $target = $ "##{target}-value"
         placeholder = $target.data "input-placeholder"
@@ -147,7 +147,43 @@ $.setupNewGoal = () ->
             $input.focus()
             false
 
+$.setupGoals = () ->
+    $(document).on "hide", ".tasks", ->
+        $("#toggle-#{$(@).attr "id"}").find("i").removeClass("icon-chevron-up").addClass("icon-chevron-down")
+    $(document).on "show", ".tasks", ->
+        $("#toggle-#{$(@).attr "id"}").find("i").removeClass("icon-chevron-down").addClass("icon-chevron-up")
+
+$.setupNewTask = () ->
+    $(document).on "click", ".create-task", ->
+        goal_id = $(@).data "goal-id"
+        new_task_path = $(@).data "new-task-path"
+        $form = $.createForm "POST", "
+            <input type='text' name='label' placeholder='a task towards this goal' />"
+        $br = $ "<br />"
+        $form.after $br
+        $input = $form.find "input[name='label']"
+        $form.submit ->
+            $.ajax new_task_path,
+                type: "POST"
+                data: $(@).serialize()
+                success: (result) ->
+                    $form.remove()
+                    $br.remove()
+                    $.standardChecks result
+                    $("#new-tasks-for-#{goal_id}").append result.html if result.html?
+                error: ->
+                    $form.remove()
+                    $br.remove()
+                    $.showError "Drat, something went wrong!"
+            false
+        $(@).before $form
+        $form.show()
+        $input.focus()
+        false
+
 $ ->
     if $.canEdit()
         $.setupEdits()
         $.setupNewGoal()
+        $.setupGoals()
+        $.setupNewTask()

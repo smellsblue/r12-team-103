@@ -20,6 +20,10 @@
     padding: 3px;
 }
 
+.xp-amount {
+    margin-top: 13px;
+}
+
 .tome-item .edit-tome-item {
     display: none;
 }

@@ -84,6 +84,11 @@ class Tome < ActiveRecord::Base
     { :goal => goal }
   end
 
+  def create_task!(goal, params)
+    task = goal.tasks.create :label => params[:label]
+    { :task => task }
+  end
+
   def morality_label
     return nil unless morality
 
