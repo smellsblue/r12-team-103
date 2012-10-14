@@ -100,7 +100,7 @@ class Tome < ActiveRecord::Base
       else
         task.accomplish!
         gain_for_this_task = gain_referenced_unique_xp? "You completed a task.", 25, "task", task.id
-        gain_for_this_goal = gain_referenced_unique_xp? "You completed a goal.", 100, "goal", task.goal_id
+        gain_for_this_goal = gain_referenced_unique_xp? "You completed a goal.", 100, "goal", task.goal_id if task.goal.accomplished?
 
         if gain_for_this_task || gain_for_this_goal
           check_levels!
