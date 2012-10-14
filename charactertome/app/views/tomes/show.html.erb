@@ -42,4 +42,12 @@
     <%= render :partial => "character_alignment", :object => :morality %>
     <%= render :partial => "character_alignment", :object => :ethics %>
   </div>
+
+  <hr />
+
+  <h2>Goals</h2>
+
+  <% @tome.goals.each do |goal| %>
+    <%= render :partial => "goal", :object => goal %>
+  <% end %>
 </div>
