@@ -20,7 +20,7 @@ class Tome < ActiveRecord::Base
 
   DEFAULTS = {
     :alignment => 50,
-    :alignment_label => "Unknown",
+    :alignment_label => "Neutral",
     :attribute => 0,
     :name => "Anonymous",
     :profession => "Nerdist"
