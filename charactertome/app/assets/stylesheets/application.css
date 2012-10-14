@@ -29,12 +29,16 @@
 .task .edit-tome-item,
 .goal-label .edit-tome-item,
 .weapon .edit-tome-item,
-.weapon .delete-tome-item {
+.weapon .delete-tome-item,
+.weapon .increase-tome-item,
+.weapon .decrease-tome-item {
     float: right;
 }
 
 .tome-item .edit-tome-item,
-.tome-item .delete-tome-item {
+.tome-item .delete-tome-item,
+.tome-item .increase-tome-item,
+.tome-item .decrease-tome-item {
     display: none;
 }
 
@@ -55,6 +59,10 @@
 .can-edit-true .tome-item-clicked .edit-tome-item,
 .can-edit-true .tome-item:hover .delete-tome-item,
 .can-edit-true .tome-item-clicked .delete-tome-item,
+.can-edit-true .tome-item:hover .increase-tome-item,
+.can-edit-true .tome-item-clicked .increase-tome-item,
+.can-edit-true .tome-item:hover .decrease-tome-item,
+.can-edit-true .tome-item-clicked .decrease-tome-item,
 .goal-label-contents {
     display: inline-block;
     *display: inline;
