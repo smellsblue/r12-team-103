@@ -82,6 +82,16 @@ class Tome < ActiveRecord::Base
       weapon.label = params[:value]
       weapon.save!
       return { :new_value => weapon.label }
+    elsif params[:increase] == "true"
+      return {} if weapon.value >= 5
+      weapon.value += 1
+      weapon.save!
+      return { :new_weapon_bonus => "+#{weapon.value}" }
+    elsif params[:decrease] == "true"
+      return {} if weapon.value <= 0
+      weapon.value -= 1
+      weapon.save!
+      return { :new_weapon_bonus => "+#{weapon.value}" }
     else
       raise "What are you trying to update?"
     end

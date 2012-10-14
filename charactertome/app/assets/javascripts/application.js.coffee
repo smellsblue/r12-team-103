@@ -300,6 +300,27 @@ $.setupNewWeapon = () ->
         $input.focus()
         false
 
+$.setupEditWeapon = () ->
+    $(document).on "click", ".increase-tome-item,.decrease-tome-item", ->
+        type = "decrease"
+        type = "increase" if $(@).is ".increase-tome-item"
+        $form = $.createForm "POST", "
+            <input type='hidden' name='#{type}' value='true' />"
+        $(@).before $form
+        $target = $ "##{$(@).data("for")}"
+        $.ajax $target.data("edit-path"),
+            type: "PUT"
+            data: $form.serialize()
+            success: (result) ->
+                $form.remove()
+                if result.new_weapon_bonus?.length
+                    $target.text result.new_weapon_bonus
+                $.standardChecks result
+            error: ->
+                $form.remove()
+                $.showError "Drat, something went wrong!"
+        false
+
 $ ->
     if $.canEdit()
         $.setupEdits()
@@ -309,3 +330,4 @@ $ ->
         $.setupNewTask()
         $.setupToggleTasks()
         $.setupNewWeapon()
+        $.setupEditWeapon()
