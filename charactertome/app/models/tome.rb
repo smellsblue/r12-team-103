@@ -27,7 +27,9 @@ class Tome < ActiveRecord::Base
   }.freeze
 
   def image
-    if default_pic && (1..MAX_DEFAULT_CHARACTER_IMAGE).include?(default_pic)
+    if default_pic == -1 && pic && pic.content
+      "/tomes/#{id}/pic.png"
+    elsif default_pic && (1..MAX_DEFAULT_CHARACTER_IMAGE).include?(default_pic)
       "character#{default_pic}.png"
     else
       "character#{(id % MAX_DEFAULT_CHARACTER_IMAGE) + 1}.png"

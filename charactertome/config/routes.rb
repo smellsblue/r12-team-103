@@ -16,6 +16,7 @@ Charactertome::Application.routes.draw do
     end
 
     member do
+      get "pic"
       get "update_pic"
     end
   end

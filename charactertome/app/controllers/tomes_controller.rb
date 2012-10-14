@@ -23,6 +23,16 @@ class TomesController < ApplicationController
     raise "You do not have permission!" if session[:user_id].to_i != @tome.owner_id
   end
 
+  def pic
+    respond_to do |format|
+      format.png do
+        tome = Tome.find params[:id]
+        raise "That tome doesn't have a pic!" unless tome.pic && tome.pic.content
+        send_data tome.pic.content, :filename => "tome_#{tome.id}.png", :type => "image/png", :disposition => "inline"
+      end
+    end
+  end
+
   private
   def load_me
     unless session[:user_id].present?
