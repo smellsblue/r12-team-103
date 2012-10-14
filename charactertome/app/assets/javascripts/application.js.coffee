@@ -101,33 +101,33 @@ $.setupEdits = () ->
         target = $(@).data "for"
         $target = $ "##{target}-value"
         placeholder = $target.data "input-placeholder"
-        $form = $.createForm "PUT", "
-            <input type='hidden' name='attribute' value='#{target}' />
-            <input type='text' name='value' placeholder='#{placeholder}' />"
-        $input = $form.find "input[name='value']"
-        $form.submit ->
-            $.ajax $("#edit_tome_path").val(),
-                type: "POST"
-                data: $(@).serialize()
-                success: (result) ->
-                    if result.new_value?.length
-                        $target.text result.new_value
-                        $target.attr "data-original-value", result.new_value
-                    else
-                        $target.text placeholder
-                        $target.attr "data-original-value", ""
-                    $form.hide()
-                    $target.show()
-                    $.standardChecks result
-                error: ->
-                    $form.hide()
-                    $target.show()
-                    $.showError "Drat, something went wrong!"
-            false
-        $target.after $form
         $(@).click ->
             $target.hide()
+            $form = $.createForm "PUT", "
+                <input type='hidden' name='attribute' value='#{target}' />
+                <input type='text' name='value' placeholder='#{placeholder}' />"
+            $input = $form.find "input[name='value']"
             $input.val $target.attr("data-original-value")
+            $form.submit ->
+                $.ajax $("#edit_tome_path").val(),
+                    type: "POST"
+                    data: $(@).serialize()
+                    success: (result) ->
+                        if result.new_value?.length
+                            $target.text result.new_value
+                            $target.attr "data-original-value", result.new_value
+                        else
+                            $target.text placeholder
+                            $target.attr "data-original-value", ""
+                        $form.remove()
+                        $target.show()
+                        $.standardChecks result
+                    error: ->
+                        $form.remove()
+                        $target.show()
+                        $.showError "Drat, something went wrong!"
+                false
+            $target.after $form
             $form.show()
             $input.focus()
             false
