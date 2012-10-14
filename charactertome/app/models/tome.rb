@@ -96,6 +96,10 @@ class Tome < ActiveRecord::Base
       else
         task.accomplish!
       end
+    elsif params[:attribute] == "label"
+      task.label = params[:value]
+      task.save!
+      return { :new_value => task.label }
     else
       raise "What are you trying to update?"
     end

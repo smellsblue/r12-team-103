@@ -1,7 +1,8 @@
 <div id="task-<%= task.id %>" class="row-fluid task" data-delete-path="<%= tome_goal_task_path @tome.id, task.goal_id, task.id %>">
   <div class="span6 task-<%= task.id %> <%= task.completed_status %> tome-item">
     <button id="task-<%= task.id %>-btn" class="btn btn-mini toggle-task task-<%= task.id %>-btn <%= "btn-success" if task.accomplished %>" data-toggle-task-path="<%= tome_goal_task_path @tome.id, task.goal_id, task.id %>" data-task-id="<%= task.id %>" data-goal-id="<%= task.goal_id %>"><i class="icon-ok"></i></button>
-    <label for="task-<%= task.id %>-btn" class="task-label"><%= task.label %></label>
+    <label id="task-<%= task.id %>-value" for="task-<%= task.id %>-btn" class="task-label" data-original-value="<%= task.label %>" data-input-placeholder="a task towards this goal" data-edit-path="<%= tome_goal_task_path @tome.id, task.goal_id, task.id %>" data-edit-field="label"><%= task.label %></label>
     <%= render :partial => "/tomes/delete_button", :object => "task-#{task.id}" %>
+    <%= render :partial => "/tomes/edit_button", :object => "task-#{task.id}" %>
   </div>
 </div>

@@ -25,7 +25,9 @@
 }
 
 .task .delete-tome-item,
-.goal-label .delete-tome-item {
+.goal-label .delete-tome-item,
+.task .edit-tome-item,
+.goal-label .edit-tome-item {
     float: right;
 }
 
