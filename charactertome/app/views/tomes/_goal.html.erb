@@ -1,9 +1,12 @@
-<div class="goal goal-<%= goal.id %>">
+<div id="goal-<%= goal.id %>" class="goal goal-<%= goal.id %>" data-delete-path="<%= tome_goal_path @tome.id, goal.id %>">
   <div class="row-fluid">
-    <h4 class="goal-label <%= "text-success" if goal.accomplished? %>">
+    <div class="span3 tome-item goal-label <%= "text-success" if goal.accomplished? %>">
       <label for="toggle-tasks-for-<%= goal.id %>"><%= goal.label %></label>
-    </h4>
+      <%= render :partial => "/tomes/delete_button", :object => "goal-#{goal.id}" %>
+    </div>
+  </div>
 
+  <div class="row-fluid">
     <div class="span10">
       <div class="progress goal-<%= goal.id %>-progress">
         <div class="bar bar-success" style="width: <%= goal.accomplished_percent %>%;">
@@ -22,7 +25,7 @@
 
   <div id="tasks-for-<%= goal.id %>" class="collapse tasks">
     <% goal.tasks.each do |task| %>
-      <%= render :partial => "task", :object => task %>
+      <%= render :partial => "/tomes/task", :object => task %>
     <% end %>
 
     <div id="new-tasks-for-<%= goal.id %>">
@@ -34,6 +37,6 @@
       </div>
     <% end %>
   </div>
-</div>
 
-<hr />
+  <hr />
+</div>

@@ -3,6 +3,10 @@ class Goal < ActiveRecord::Base
   belongs_to :tome
   has_many :tasks
 
+  def has_uncompleted_tasks?
+    tasks.where(:accomplished => false).count > 0
+  end
+
   def accomplished?
     accomplished_percent == 100
   end
