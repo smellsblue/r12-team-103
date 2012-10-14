@@ -3,6 +3,10 @@ class Goal < ActiveRecord::Base
   belongs_to :tome
   has_many :tasks
 
+  def accomplished?
+    accomplished_percent == 100
+  end
+
   def accomplished_percent
     task_count = tasks.count
 
