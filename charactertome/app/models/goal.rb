@@ -4,10 +4,12 @@ class Goal < ActiveRecord::Base
   has_many :tasks
 
   def accomplished_percent
-    if tasks.empty?
+    task_count = tasks.count
+
+    if task_count.zero?
       0
     else
-      42
+      (100 * tasks.where(:accomplished => true).count / task_count).to_i
     end
   end
 end

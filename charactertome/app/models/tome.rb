@@ -85,7 +85,8 @@ class Tome < ActiveRecord::Base
   end
 
   def create_task!(goal, params)
-    { :task => "Not yet." }
+    task = goal.tasks.create :label => params[:label]
+    { :task => task }
   end
 
   def morality_label
