@@ -135,6 +135,7 @@ $.setupNewGoal = () ->
                 success: (result) ->
                     $form.hide()
                     $.standardChecks result
+                    $("#new-goals").append result.html if result.html?
                 error: ->
                     $form.hide()
                     $.showError "Drat, something went wrong!"
