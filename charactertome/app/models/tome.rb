@@ -89,6 +89,20 @@ class Tome < ActiveRecord::Base
     { :task => task }
   end
 
+  def update_task!(task, params)
+    if params[:toggle] == "true"
+      if task.accomplished
+        task.unaccomplish!
+      else
+        task.accomplish!
+      end
+    else
+      raise "What are you trying to update?"
+    end
+
+    {}
+  end
+
   def morality_label
     return nil unless morality
 

@@ -3,8 +3,8 @@
     <h4><%= goal.label %></h4>
 
     <div class="span10">
-      <div class="progress">
-        <div class="bar" style="width: <%= goal.accomplished_percent %>%;">
+      <div class="progress goal-<%= goal.id %>-progress">
+        <div class="bar bar-success" style="width: <%= goal.accomplished_percent %>%;">
         </div>
       </div>
     </div>
