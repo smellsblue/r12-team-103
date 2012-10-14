@@ -116,6 +116,8 @@ $.setupEdits = () ->
     $(document).on "click", ".edit-tome-item", ->
         target = $(@).data "for"
         $target = $ "##{target}-value"
+        return false if $target.data("editing") == "true"
+        $target.data "editing", "true"
         placeholder = $target.data "input-placeholder"
         field = $target.data "edit-field"
         field = target unless field?
@@ -132,6 +134,7 @@ $.setupEdits = () ->
                 type: "POST"
                 data: $(@).serialize()
                 success: (result) ->
+                    $target.removeData "editing"
                     if result.new_value?.length
                         $target.text result.new_value
                         $target.attr "data-original-value", result.new_value
@@ -142,6 +145,7 @@ $.setupEdits = () ->
                     $target.show()
                     $.standardChecks result
                 error: ->
+                    $target.removeData "editing"
                     $form.remove()
                     $target.show()
                     $.showError "Drat, something went wrong!"
