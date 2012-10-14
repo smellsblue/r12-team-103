@@ -84,7 +84,7 @@ $.showError = (message) ->
     $modal.modal()
 
 $.createForm = (method, content) ->
-    $form = $ "<form class='tome-edit-form' style='display: none;'>
+    $form = $ "<form class='inline-form' style='display: none;'>
           <input type='hidden' name='_method' value='#{method}' />
           <input type='hidden' name='authenticity_token' />
           #{content}
@@ -93,71 +93,69 @@ $.createForm = (method, content) ->
     $form
 
 $.setupEdits = () ->
-    $(".tome-item").click ->
+    $(document).on "click", ".tome-item", ->
         wasClicked = $(@).is ".tome-item-clicked"
         $(".tome-item-clicked").removeClass "tome-item-clicked"
         $(@).addClass "tome-item-clicked" unless wasClicked
-    $(".edit-tome-item").each ->
+    $(document).on "click", ".edit-tome-item", ->
         target = $(@).data "for"
         $target = $ "##{target}-value"
         placeholder = $target.data "input-placeholder"
-        $(@).click ->
-            $target.hide()
-            $form = $.createForm "PUT", "
-                <input type='hidden' name='attribute' value='#{target}' />
-                <input type='text' name='value' placeholder='#{placeholder}' />"
-            $input = $form.find "input[name='value']"
-            $input.val $target.attr("data-original-value")
-            $form.submit ->
-                $.ajax $("#edit_tome_path").val(),
-                    type: "POST"
-                    data: $(@).serialize()
-                    success: (result) ->
-                        if result.new_value?.length
-                            $target.text result.new_value
-                            $target.attr "data-original-value", result.new_value
-                        else
-                            $target.text placeholder
-                            $target.attr "data-original-value", ""
-                        $form.remove()
-                        $target.show()
-                        $.standardChecks result
-                    error: ->
-                        $form.remove()
-                        $target.show()
-                        $.showError "Drat, something went wrong!"
-                false
-            $target.after $form
-            $form.show()
-            $input.focus()
+        $target.hide()
+        $form = $.createForm "PUT", "
+            <input type='hidden' name='attribute' value='#{target}' />
+            <input type='text' name='value' placeholder='#{placeholder}' />"
+        $input = $form.find "input[name='value']"
+        $input.val $target.attr("data-original-value")
+        $form.submit ->
+            $.ajax $("#edit_tome_path").val(),
+                type: "POST"
+                data: $(@).serialize()
+                success: (result) ->
+                    if result.new_value?.length
+                        $target.text result.new_value
+                        $target.attr "data-original-value", result.new_value
+                    else
+                        $target.text placeholder
+                        $target.attr "data-original-value", ""
+                    $form.remove()
+                    $target.show()
+                    $.standardChecks result
+                error: ->
+                    $form.remove()
+                    $target.show()
+                    $.showError "Drat, something went wrong!"
             false
+        $target.after $form
+        $form.show()
+        $input.focus()
+        false
 
 $.setupNewGoal = () ->
-    $(".create-goal").each ->
-        $(@).click ->
-            $form = $.createForm "POST", "
-                <input type='text' name='label' placeholder='a long-term goal' />"
-            $br = $ "<br />"
-            $form.after $br
-            $input = $form.find "input[name='label']"
-            $form.submit ->
-                $.ajax $("#create_goal_path").val(),
-                    type: "POST"
-                    data: $(@).serialize()
-                    success: (result) ->
-                        $form.remove()
-                        $br.remove()
-                        $.standardChecks result
-                        $("#new-goals").append result.html if result.html?
-                    error: ->
-                        $form.remove()
-                        $br.remove
-                        $.showError "Drat, something went wrong!"
-                false
-            $(@).before $form
-            $form.show()
-            $input.focus()
+    $(document).on "click", ".create-goal", ->
+        $form = $.createForm "POST", "
+            <input type='text' name='label' placeholder='a long-term goal' />"
+        $br = $ "<br />"
+        $form.after $br
+        $input = $form.find "input[name='label']"
+        $form.submit ->
+            $.ajax $("#create_goal_path").val(),
+                type: "POST"
+                data: $(@).serialize()
+                success: (result) ->
+                    $form.remove()
+                    $br.remove()
+                    $.standardChecks result
+                    $("#new-goals").append result.html if result.html?
+                error: ->
+                    $form.remove()
+                    $br.remove
+                    $.showError "Drat, something went wrong!"
             false
+        $(@).before $form
+        $form.show()
+        $input.focus()
+        false
 
 $.setupGoals = () ->
     $(document).on "hide", ".tasks", ->
