@@ -115,13 +115,25 @@ $.showError = (message) ->
         $modal.remove()
     $modal.modal()
 
-$.createForm = (method, content) ->
+$.createForm = (method, content, cancelCallback) ->
     $form = $ "<form class='inline-form' style='display: none;'>
           <input type='hidden' name='_method' value='#{method}' />
           <input type='hidden' name='authenticity_token' />
           #{content}
+          <button type='submit' class='btn btn-mini submit-button'>
+            <i class='icon-ok'></i>
+          </button>
+          <button class='btn btn-mini cancel-button'>
+            <i class='icon-remove'></i>
+          </button>
         </form>"
     $form.find("input[name='authenticity_token']").val $("meta[name='csrf-token']").attr("content")
+    $form.find(".cancel-button").click ->
+        cancelCallback?()
+        false
+    $form.find(".submit-button").click ->
+        $form.submit()
+        false
     $form
 
 $.setupEdits = () ->
@@ -140,7 +152,10 @@ $.setupEdits = () ->
         $target.hide()
         $form = $.createForm "PUT", "
             <input type='hidden' name='attribute' value='#{field}' />
-            <input type='text' name='value' placeholder='#{placeholder}' />"
+            <input type='text' name='value' placeholder='#{placeholder}' />", ->
+            $target.removeData "editing"
+            $form.remove()
+            $target.show()
         $input = $form.find "input[name='value']"
         $input.val $target.attr("data-original-value")
         path = $target.data "edit-path"
@@ -238,7 +253,9 @@ $.setupDeletes = () ->
 $.setupNewGoal = () ->
     $(document).on "click", ".create-goal", ->
         $form = $.createForm "POST", "
-            <input type='text' name='label' placeholder='a long-term goal' />"
+            <input type='text' name='label' placeholder='a long-term goal' />", ->
+            $form.remove()
+            $br.remove()
         $br = $ "<br />"
         $form.after $br
         $input = $form.find "input[name='label']"
@@ -252,7 +269,7 @@ $.setupNewGoal = () ->
                     $.standardChecks result
                 error: ->
                     $form.remove()
-                    $br.remove
+                    $br.remove()
                     $.showError "Drat, something went wrong!"
             false
         $(@).before $form
@@ -270,7 +287,9 @@ $.setupNewTask = () ->
     $(document).on "click", ".create-task", ->
         new_task_path = $(@).data "new-task-path"
         $form = $.createForm "POST", "
-            <input type='text' name='label' placeholder='a task towards this goal' />"
+            <input type='text' name='label' placeholder='a task towards this goal' />", ->
+            $form.remove()
+            $br.remove()
         $br = $ "<br />"
         $form.after $br
         $input = $form.find "input[name='label']"
@@ -311,7 +330,9 @@ $.setupToggleTasks = () ->
 $.setupNewWeapon = () ->
     $(document).on "click", ".create-weapon", ->
         $form = $.createForm "POST", "
-            <input type='text' name='label' placeholder='a skill you have' />"
+            <input type='text' name='label' placeholder='a skill you have' />", ->
+            $form.remove()
+            $br.remove()
         $br = $ "<br />"
         $form.after $br
         $input = $form.find "input[name='label']"
@@ -325,7 +346,7 @@ $.setupNewWeapon = () ->
                     $.standardChecks result
                 error: ->
                     $form.remove()
-                    $br.remove
+                    $br.remove()
                     $.showError "Drat, something went wrong!"
             false
         $(@).before $form
