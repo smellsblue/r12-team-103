@@ -5,6 +5,8 @@ Charactertome::Application.routes.draw do
   root :to => "home#index"
 
   resources :tomes, :only => [:show, :update] do
+    resources :weapons, :only => [:create, :destroy, :update]
+
     resources :goals, :only => [:create, :destroy, :update] do
       resources :tasks, :only => [:create, :destroy, :update]
     end

@@ -5,6 +5,7 @@ class Tome < ActiveRecord::Base
   belongs_to :owner, :class_name => "User"
   has_many :experiences
   has_many :goals
+  has_many :weapons
   before_save :check_for_new_xp_and_levels
 
   validates_each :intelligence, :charisma, :strength, :wisdom, :will, :confidence, :morality, :ethics do |record, attr, value|
@@ -69,6 +70,33 @@ class Tome < ActiveRecord::Base
     end
 
     result = { :new_value => value, :xp_gained => xp_gained, :new_xp_total => xp_total, :levels_gained => levels_gained, :new_level => level, :new_level_label => level.ordinalize }
+  end
+
+  def create_weapon!(params)
+    weapon = weapons.create :label => params[:label]
+    { :weapon => weapon }
+  end
+
+  def update_weapon!(weapon, params)
+    if params[:attribute] == "label"
+      weapon.label = params[:value]
+      weapon.save!
+      return { :new_value => weapon.label }
+    elsif params[:increase] == "true"
+      return {} if weapon.value >= 5
+      weapon.value += 1
+      weapon.save!
+      return { :new_weapon_bonus => "+#{weapon.value}" }
+    elsif params[:decrease] == "true"
+      return {} if weapon.value <= 0
+      weapon.value -= 1
+      weapon.save!
+      return { :new_weapon_bonus => "+#{weapon.value}" }
+    else
+      raise "What are you trying to update?"
+    end
+
+    {}
   end
 
   def create_goal!(params)

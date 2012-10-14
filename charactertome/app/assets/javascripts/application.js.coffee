@@ -41,6 +41,7 @@ $.standardChecks = (server_result) ->
     $.checkXp server_result
     $.checkGoal server_result
     $.checkTask server_result
+    $.checkWeapon server_result
 
 $.checkLevel = (server_result) ->
     if server_result.new_level_label?
@@ -80,6 +81,10 @@ $.checkTask = (server_result) ->
     else if server_result.task_completed_status == "not_completed"
         $(".task-#{server_result.completed_task_id}").removeClass("completed").addClass("not_completed")
         $(".task-#{server_result.completed_task_id}-btn").removeClass("btn-success")
+
+$.checkWeapon = (server_result) ->
+    if server_result.new_weapon_html?
+        $("#new-weapons").append server_result.new_weapon_html
 
 $.showError = (message) ->
     $modal = $ "<div class='modal hide fade'>
@@ -270,6 +275,52 @@ $.setupToggleTasks = () ->
                 $.showError "Drat, something went wrong!"
         false
 
+$.setupNewWeapon = () ->
+    $(document).on "click", ".create-weapon", ->
+        $form = $.createForm "POST", "
+            <input type='text' name='label' placeholder='a skill you have' />"
+        $br = $ "<br />"
+        $form.after $br
+        $input = $form.find "input[name='label']"
+        $form.submit ->
+            $.ajax $("#create_weapon_path").val(),
+                type: "POST"
+                data: $(@).serialize()
+                success: (result) ->
+                    $form.remove()
+                    $br.remove()
+                    $.standardChecks result
+                error: ->
+                    $form.remove()
+                    $br.remove
+                    $.showError "Drat, something went wrong!"
+            false
+        $(@).before $form
+        $form.show()
+        $input.focus()
+        false
+
+$.setupEditWeapon = () ->
+    $(document).on "click", ".increase-tome-item,.decrease-tome-item", ->
+        type = "decrease"
+        type = "increase" if $(@).is ".increase-tome-item"
+        $form = $.createForm "POST", "
+            <input type='hidden' name='#{type}' value='true' />"
+        $(@).before $form
+        $target = $ "##{$(@).data("for")}"
+        $.ajax $target.data("edit-path"),
+            type: "PUT"
+            data: $form.serialize()
+            success: (result) ->
+                $form.remove()
+                if result.new_weapon_bonus?.length
+                    $target.text result.new_weapon_bonus
+                $.standardChecks result
+            error: ->
+                $form.remove()
+                $.showError "Drat, something went wrong!"
+        false
+
 $ ->
     if $.canEdit()
         $.setupEdits()
@@ -278,3 +329,5 @@ $ ->
         $.setupGoals()
         $.setupNewTask()
         $.setupToggleTasks()
+        $.setupNewWeapon()
+        $.setupEditWeapon()

@@ -1,5 +1,6 @@
 <input id="edit_tome_path" type="hidden" value="<%= tome_path @tome.id %>" />
 <input id="create_goal_path" type="hidden" value="<%= tome_goals_path @tome.id %>" />
+<input id="create_weapon_path" type="hidden" value="<%= tome_weapons_path @tome.id %>" />
 <input id="can_edit" type="hidden" value="<%= can_edit? %>" />
 
 <div class="can-edit-<%= can_edit? %>">
@@ -58,6 +59,23 @@
   <% if can_edit? %>
     <div class="row-fluid">
       <input class="btn btn-primary create-goal" type="button" value="New Goal" />
+    </div>
+  <% end %>
+
+  <hr />
+
+  <h2>Weapons</h2>
+
+  <% @tome.weapons.each do |weapon| %>
+    <%= render :partial => "weapon", :object => weapon %>
+  <% end %>
+
+  <div id="new-weapons">
+  </div>
+
+  <% if can_edit? %>
+    <div class="row-fluid">
+      <input class="btn btn-primary create-weapon" type="button" value="New Weapon" />
     </div>
   <% end %>
 </div>
