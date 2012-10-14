@@ -11,6 +11,10 @@
  *= require_self
  *= require_tree .
  */
+footer .container-fluid {
+    padding: 15px;
+}
+
 .character-attribute-label,
 .character-alignment-label {
     margin-right: 15px;
@@ -139,6 +143,10 @@ form.inline-form {
 .task .completed,
 .text-success {
     color: #468847;
+}
+
+.level-up {
+    color: #00BB03;
 }
 
 .task .completed .task-label {
