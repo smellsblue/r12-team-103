@@ -60,6 +60,11 @@ $.checkGoal = (server_result, goal_id) ->
         new_width = $(".goal-#{goal_id}-progress").width() * (server_result.goal_completed_percent / 100.0)
         $(".goal-#{goal_id}-progress .bar").stop().animate width: new_width
 
+        if server_result.goal_completed_percent == 100
+            $(".goal-#{goal_id} .goal-label").addClass("text-success")
+        else
+            $(".goal-#{goal_id} .goal-label").removeClass("text-success")
+
 $.showError = (message) ->
     $modal = $ "<div class='modal hide fade'>
           <div class='modal-header'>
