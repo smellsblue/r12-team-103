@@ -5,6 +5,8 @@ Charactertome::Application.routes.draw do
   root :to => "home#index"
 
   resources :tomes, :only => [:show, :update] do
+    resources :goals, :only => [:create, :update]
+
     collection do
       get "me"
     end

@@ -4,6 +4,7 @@ class Tome < ActiveRecord::Base
   attr_accessible :owner, :owner_id
   belongs_to :owner, :class_name => "User"
   has_many :experiences
+  has_many :goals
   before_save :check_for_new_xp_and_levels
 
   validates_each :intelligence, :charisma, :strength, :wisdom, :will, :confidence, :morality, :ethics do |record, attr, value|
@@ -76,6 +77,11 @@ class Tome < ActiveRecord::Base
     end
 
     result = { :new_value => value, :xp_gained => xp_gained, :new_xp_total => xp_total, :levels_gained => levels_gained, :new_level => level, :new_level_label => level.ordinalize }
+  end
+
+  def create_goal!(params)
+    goal = goals.create :label => params[:label]
+    { :goal => goal }
   end
 
   def morality_label
