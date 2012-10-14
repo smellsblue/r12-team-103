@@ -23,9 +23,12 @@
       <%= render :partial => "task", :object => task %>
     <% end %>
 
+    <div id="new-tasks-for-<%= goal.id %>">
+    </div>
+
     <% if can_edit? %>
       <div class="row-fluid">
-        <input class="btn create-task" type="button" value="New Task" />
+        <input class="btn create-task" type="button" value="New Task" data-goal-id="<%= goal.id %>" data-new-task-path="<%= tome_goal_tasks_path @tome.id, goal.id %>" />
       </div>
     <% end %>
   </div>
