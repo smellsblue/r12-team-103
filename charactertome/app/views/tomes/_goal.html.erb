@@ -1,8 +1,9 @@
 <div id="goal-<%= goal.id %>" class="goal goal-<%= goal.id %>" data-delete-path="<%= tome_goal_path @tome.id, goal.id %>">
   <div class="row-fluid">
     <div class="span3 tome-item goal-label <%= "text-success" if goal.accomplished? %>">
-      <label for="toggle-tasks-for-<%= goal.id %>"><%= goal.label %></label>
+      <label id="goal-<%= goal.id %>-value" class="goal-label-contents" for="toggle-tasks-for-<%= goal.id %>" data-original-value="<%= goal.label %>" data-input-placeholder="a long-term goal" data-edit-path="<%= tome_goal_path @tome.id, goal.id %>" data-edit-field="label"><%= goal.label %></label>
       <%= render :partial => "/tomes/delete_button", :object => "goal-#{goal.id}" %>
+      <%= render :partial => "/tomes/edit_button", :object => "goal-#{goal.id}" %>
     </div>
   </div>
 

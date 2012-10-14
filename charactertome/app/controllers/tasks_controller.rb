@@ -28,7 +28,7 @@ class TasksController < ApplicationController
       :completed_task_id => @task.id,
       :goal_completed_percent => @goal.accomplished_percent,
       :goal_id => @goal.id
-    }
+    }.merge(result)
   end
 
   private

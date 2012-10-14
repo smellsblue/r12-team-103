@@ -25,12 +25,10 @@
 }
 
 .task .delete-tome-item,
-.goal-label .delete-tome-item {
+.goal-label .delete-tome-item,
+.task .edit-tome-item,
+.goal-label .edit-tome-item {
     float: right;
-}
-
-.goal-label .delete-tome-item {
-    margin-top: -23px;
 }
 
 .tome-item .edit-tome-item,
@@ -54,7 +52,8 @@
 .can-edit-true .tome-item:hover .edit-tome-item,
 .can-edit-true .tome-item-clicked .edit-tome-item,
 .can-edit-true .tome-item:hover .delete-tome-item,
-.can-edit-true .tome-item-clicked .delete-tome-item {
+.can-edit-true .tome-item-clicked .delete-tome-item,
+.goal-label-contents {
     display: inline-block;
     *display: inline;
     /* IE7 inline-block hack */

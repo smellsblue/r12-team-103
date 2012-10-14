@@ -117,14 +117,18 @@ $.setupEdits = () ->
         target = $(@).data "for"
         $target = $ "##{target}-value"
         placeholder = $target.data "input-placeholder"
+        field = $target.data "edit-field"
+        field = target unless field?
         $target.hide()
         $form = $.createForm "PUT", "
-            <input type='hidden' name='attribute' value='#{target}' />
+            <input type='hidden' name='attribute' value='#{field}' />
             <input type='text' name='value' placeholder='#{placeholder}' />"
         $input = $form.find "input[name='value']"
         $input.val $target.attr("data-original-value")
+        path = $target.data "edit-path"
+        path = $("#edit_tome_path").val() unless path?
         $form.submit ->
-            $.ajax $("#edit_tome_path").val(),
+            $.ajax path,
                 type: "POST"
                 data: $(@).serialize()
                 success: (result) ->

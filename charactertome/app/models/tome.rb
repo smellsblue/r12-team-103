@@ -84,6 +84,18 @@ class Tome < ActiveRecord::Base
     { :goal => goal }
   end
 
+  def update_goal!(goal, params)
+    if params[:attribute] == "label"
+      goal.label = params[:value]
+      goal.save!
+      return { :new_value => goal.label }
+    else
+      raise "What are you trying to update?"
+    end
+
+    {}
+  end
+
   def create_task!(goal, params)
     task = goal.tasks.create :label => params[:label]
     { :task => task }
@@ -96,6 +108,10 @@ class Tome < ActiveRecord::Base
       else
         task.accomplish!
       end
+    elsif params[:attribute] == "label"
+      task.label = params[:value]
+      task.save!
+      return { :new_value => task.label }
     else
       raise "What are you trying to update?"
     end
