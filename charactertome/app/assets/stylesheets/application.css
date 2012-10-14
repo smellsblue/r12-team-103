@@ -24,8 +24,13 @@
     margin-top: 13px;
 }
 
-.task .delete-tome-item {
+.task .delete-tome-item,
+.goal-label .delete-tome-item {
     float: right;
+}
+
+.goal-label .delete-tome-item {
+    margin-top: -23px;
 }
 
 .tome-item .edit-tome-item,
