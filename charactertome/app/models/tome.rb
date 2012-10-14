@@ -16,7 +16,7 @@ class Tome < ActiveRecord::Base
     end
   end
 
-  MAX_DEFAULT_CHARACTER_IMAGE = 5
+  MAX_DEFAULT_CHARACTER_IMAGE = 10
 
   DEFAULTS = {
     :alignment => 50,
