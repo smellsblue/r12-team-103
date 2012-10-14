@@ -9,6 +9,8 @@ class WeaponsController < ApplicationController
   end
 
   def destroy
+    raise "Weapon is required!" unless @weapon
+    @weapon.destroy
     render :json => {}
   end
 
