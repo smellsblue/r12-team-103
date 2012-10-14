@@ -1,4 +1,5 @@
-<input id="tome_id" type="hidden" value="<%= @tome.id %>" />
+<input id="edit_tome_path" type="hidden" value="<%= tome_path @tome.id %>" />
+<input id="create_goal_path" type="hidden" value="<%= tome_goals_path(@tome.id) %>" />
 <input id="can_edit" type="hidden" value="<%= can_edit? %>" />
 
 <div class="can-edit-<%= can_edit? %>">
@@ -53,7 +54,7 @@
 
   <% if can_edit? %>
     <div class="row-fluid">
-      <input id="create-goal" class="btn btn-primary" type="button" value="New Goal" data-create-path="<%= tome_goals_path(@tome.id) %>" />
+      <input class="btn btn-primary create-goal" type="button" value="New Goal" />
     </div>
   <% end %>
 </div>

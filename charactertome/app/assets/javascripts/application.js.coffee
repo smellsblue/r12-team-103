@@ -36,6 +36,10 @@ $.fn.gain = (message) ->
         1000
         -> $gain.remove())
 
+$.standardChecks = (server_result) ->
+    $.checkLevel server_result
+    $.checkXp server_result
+
 $.checkLevel = (server_result) ->
     if server_result.new_level_label?
         $(".character-level").text server_result.new_level_label
@@ -69,8 +73,8 @@ $.showError = (message) ->
         $modal.remove()
     $modal.modal()
 
-$.createForm = (method, id, content) ->
-    $form = $ "<form class='tome-edit-form' id='#{id}' style='display: none;'>
+$.createForm = (method, content) ->
+    $form = $ "<form class='tome-edit-form' style='display: none;'>
           <input type='hidden' name='_method' value='#{method}' />
           <input type='hidden' name='authenticity_token' />
           #{content}
@@ -87,12 +91,12 @@ $.setupEdits = () ->
         target = $(@).data "for"
         $target = $ "##{target}-value"
         placeholder = $target.data "input-placeholder"
-        $form = $.createForm "PUT", "form-for-#{target}", "
+        $form = $.createForm "PUT", "
             <input type='hidden' name='attribute' value='#{target}' />
             <input type='text' name='value' placeholder='#{placeholder}' />"
         $input = $form.find "input[name='value']"
         $form.submit ->
-            $.ajax "/tomes/#{$("#tome_id").val()}",
+            $.ajax $("#edit_tome_path").val(),
                 type: "POST"
                 data: $(@).serialize()
                 success: (result) ->
@@ -104,8 +108,7 @@ $.setupEdits = () ->
                         $target.attr "data-original-value", ""
                     $form.hide()
                     $target.show()
-                    $.checkLevel result
-                    $.checkXp result
+                    $.standardChecks result
                 error: ->
                     $form.hide()
                     $target.show()
@@ -120,7 +123,28 @@ $.setupEdits = () ->
             false
 
 $.setupNewGoal = () ->
-    false
+    $(".create-goal").each ->
+        $form = $.createForm "POST", "
+            <input type='text' name='label' placeholder='a long-term goal' />"
+        $form.after "<br />"
+        $input = $form.find "input[name='label']"
+        $form.submit ->
+            $.ajax $("#create_goal_path").val(),
+                type: "POST"
+                data: $(@).serialize()
+                success: (result) ->
+                    $form.hide()
+                    $.standardChecks result
+                error: ->
+                    $form.hide()
+                    $.showError "Drat, something went wrong!"
+            false
+        $(@).before $form
+        $(@).click ->
+            $input.val ""
+            $form.show()
+            $input.focus()
+            false
 
 $ ->
     if $.canEdit()
