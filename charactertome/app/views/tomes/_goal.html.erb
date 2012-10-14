@@ -1,10 +1,30 @@
-<div class="row-fluid goal">
-  <h4><%= goal.label %></h4>
+<div class="goal">
+  <div class="row-fluid">
+    <h4><%= goal.label %></h4>
 
-  <div class="span10">
-    <div class="progress">
-      <div class="bar" style="width: <%= goal.accomplished_percent %>%;">
+    <div class="span10">
+      <div class="progress">
+        <div class="bar" style="width: <%= goal.accomplished_percent %>%;">
+        </div>
       </div>
     </div>
   </div>
+
+  <div class="row-fluid">
+    <div class="span1">
+      <button id="toggle-tasks-for-<%= goal.id %>" class="btn btn-mini toggle-tasks" data-toggle="collapse" data-target="#tasks-for-<%= goal.id %>">
+        <i class="icon-chevron-down"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="tasks-for-<%= goal.id %>" class="collapse tasks">
+    <% if can_edit? %>
+      <div class="row-fluid">
+        <input class="btn create-task" type="button" value="New Task" />
+      </div>
+    <% end %>
+  </div>
 </div>
+
+<hr />

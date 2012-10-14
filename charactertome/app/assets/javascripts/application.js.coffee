@@ -87,7 +87,7 @@ $.setupEdits = () ->
         wasClicked = $(@).is ".tome-item-clicked"
         $(".tome-item-clicked").removeClass "tome-item-clicked"
         $(@).addClass "tome-item-clicked" unless wasClicked
-    $("a.edit-tome-item").each ->
+    $(".edit-tome-item").each ->
         target = $(@).data "for"
         $target = $ "##{target}-value"
         placeholder = $target.data "input-placeholder"
@@ -122,6 +122,12 @@ $.setupEdits = () ->
             $input.focus()
             false
 
+$.setupGoals = () ->
+    $(document).on "hide", ".tasks", ->
+        $("#toggle-#{$(@).attr "id"}").find("i").removeClass("icon-chevron-up").addClass("icon-chevron-down")
+    $(document).on "show", ".tasks", ->
+        $("#toggle-#{$(@).attr "id"}").find("i").removeClass("icon-chevron-down").addClass("icon-chevron-up")
+
 $.setupNewGoal = () ->
     $(".create-goal").each ->
         $form = $.createForm "POST", "
@@ -151,3 +157,4 @@ $ ->
     if $.canEdit()
         $.setupEdits()
         $.setupNewGoal()
+        $.setupGoals()
