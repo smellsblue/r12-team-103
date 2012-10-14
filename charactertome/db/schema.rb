@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121014215336) do
+ActiveRecord::Schema.define(:version => 20121014224241) do
 
   create_table "experiences", :force => true do |t|
     t.integer  "tome_id",      :null => false
@@ -26,6 +26,14 @@ ActiveRecord::Schema.define(:version => 20121014215336) do
   create_table "goals", :force => true do |t|
     t.integer  "tome_id",    :null => false
     t.string   "label",      :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "pics", :force => true do |t|
+    t.integer  "tome_id"
+    t.string   "filename"
+    t.binary   "content"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

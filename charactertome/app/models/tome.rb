@@ -6,6 +6,7 @@ class Tome < ActiveRecord::Base
   has_many :experiences
   has_many :goals
   has_many :weapons
+  has_one :pic
   before_save :check_for_new_xp_and_levels
 
   validates_each :intelligence, :charisma, :strength, :wisdom, :will, :confidence, :morality, :ethics do |record, attr, value|
@@ -56,6 +57,31 @@ class Tome < ActiveRecord::Base
         value = self.name = value || name
       when "default_pic"
         self.default_pic = value.to_i
+
+        if pic
+          pic.filename = nil
+          pic.content = nil
+          pic.save!
+        end
+      when "upload_pic"
+        file = params[:pic]
+        original_filename = file.original_filename
+        extension = File.extname original_filename
+        filename = File.basename original_filename
+        filename = nil if filename.blank?
+        extension = extension[/^\.?(.*?)$/, 1].downcase if extension
+        extension = nil if extension.blank?
+        raise "Only PNG is accepted!" unless extension == "png"
+
+        if pic
+          pic.filename = filename
+          pic.content = file.read
+          pic.save!
+        else
+          Pic.create :tome => self, :filename => filename, :content => file.read
+        end
+
+        self.default_pic = -1
       else
         raise "Not allowed to update #{params[:attribute]}"
       end
