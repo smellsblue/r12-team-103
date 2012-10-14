@@ -72,7 +72,7 @@
     height: 30px;
 }
 
-form.tome-edit-form {
+form.inline-form {
     display: inline;
     margin: 0;
     padding: 0;
@@ -94,8 +94,13 @@ form.tome-edit-form {
     border-right: 1px solid #000;
 }
 
-.task .completed {
+.task .completed,
+.text-success {
     color: #468847;
+}
+
+.task .completed .task-label {
+    text-decoration: line-through;
 }
 
 .task-label {

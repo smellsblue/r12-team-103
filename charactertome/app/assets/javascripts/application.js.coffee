@@ -55,6 +55,16 @@ $.checkXp = (server_result) ->
     if server_result.xp_gained? && server_result.xp_gained > 0
         $(".character-xp").gain "+#{server_result.xp_gained}&nbsp;xp"
 
+$.checkGoal = (server_result, goal_id) ->
+    if server_result.goal_completed_percent?
+        new_width = $(".goal-#{goal_id}-progress").width() * (server_result.goal_completed_percent / 100.0)
+        $(".goal-#{goal_id}-progress .bar").stop().animate width: new_width
+
+        if server_result.goal_completed_percent == 100
+            $(".goal-#{goal_id} .goal-label").addClass("text-success")
+        else
+            $(".goal-#{goal_id} .goal-label").removeClass("text-success")
+
 $.showError = (message) ->
     $modal = $ "<div class='modal hide fade'>
           <div class='modal-header'>
@@ -74,7 +84,7 @@ $.showError = (message) ->
     $modal.modal()
 
 $.createForm = (method, content) ->
-    $form = $ "<form class='tome-edit-form' style='display: none;'>
+    $form = $ "<form class='inline-form' style='display: none;'>
           <input type='hidden' name='_method' value='#{method}' />
           <input type='hidden' name='authenticity_token' />
           #{content}
@@ -83,18 +93,20 @@ $.createForm = (method, content) ->
     $form
 
 $.setupEdits = () ->
-    $(".tome-item").click ->
+    $(document).on "click", ".tome-item", ->
         wasClicked = $(@).is ".tome-item-clicked"
         $(".tome-item-clicked").removeClass "tome-item-clicked"
         $(@).addClass "tome-item-clicked" unless wasClicked
-    $(".edit-tome-item").each ->
+    $(document).on "click", ".edit-tome-item", ->
         target = $(@).data "for"
         $target = $ "##{target}-value"
         placeholder = $target.data "input-placeholder"
+        $target.hide()
         $form = $.createForm "PUT", "
             <input type='hidden' name='attribute' value='#{target}' />
             <input type='text' name='value' placeholder='#{placeholder}' />"
         $input = $form.find "input[name='value']"
+        $input.val $target.attr("data-original-value")
         $form.submit ->
             $.ajax $("#edit_tome_path").val(),
                 type: "POST"
@@ -106,46 +118,44 @@ $.setupEdits = () ->
                     else
                         $target.text placeholder
                         $target.attr "data-original-value", ""
-                    $form.hide()
+                    $form.remove()
                     $target.show()
                     $.standardChecks result
                 error: ->
-                    $form.hide()
+                    $form.remove()
                     $target.show()
                     $.showError "Drat, something went wrong!"
             false
         $target.after $form
-        $(@).click ->
-            $target.hide()
-            $input.val $target.attr("data-original-value")
-            $form.show()
-            $input.focus()
-            false
+        $form.show()
+        $input.focus()
+        false
 
 $.setupNewGoal = () ->
-    $(".create-goal").each ->
+    $(document).on "click", ".create-goal", ->
         $form = $.createForm "POST", "
             <input type='text' name='label' placeholder='a long-term goal' />"
-        $form.after "<br />"
+        $br = $ "<br />"
+        $form.after $br
         $input = $form.find "input[name='label']"
         $form.submit ->
             $.ajax $("#create_goal_path").val(),
                 type: "POST"
                 data: $(@).serialize()
                 success: (result) ->
-                    $form.hide()
+                    $form.remove()
+                    $br.remove()
                     $.standardChecks result
                     $("#new-goals").append result.html if result.html?
                 error: ->
-                    $form.hide()
+                    $form.remove()
+                    $br.remove
                     $.showError "Drat, something went wrong!"
             false
         $(@).before $form
-        $(@).click ->
-            $input.val ""
-            $form.show()
-            $input.focus()
-            false
+        $form.show()
+        $input.focus()
+        false
 
 $.setupGoals = () ->
     $(document).on "hide", ".tasks", ->
@@ -170,6 +180,7 @@ $.setupNewTask = () ->
                     $form.remove()
                     $br.remove()
                     $.standardChecks result
+                    $.checkGoal result, goal_id
                     $("#new-tasks-for-#{goal_id}").append result.html if result.html?
                 error: ->
                     $form.remove()
@@ -194,6 +205,7 @@ $.setupToggleTasks = () ->
             success: (result) ->
                 $form.remove()
                 $.standardChecks result
+                $.checkGoal result, goal_id
 
                 if result.task_completed_status == "completed"
                     $(".task-#{task_id}").removeClass("not_completed").addClass("completed")
@@ -201,10 +213,6 @@ $.setupToggleTasks = () ->
                 else if result.task_completed_status == "not_completed"
                     $(".task-#{task_id}").removeClass("completed").addClass("not_completed")
                     $(".task-#{task_id}-btn").removeClass("btn-success")
-
-                if result.goal_completed_percent?
-                    new_width = $(".goal-#{goal_id}-progress").width() * (result.goal_completed_percent / 100.0)
-                    $(".goal-#{goal_id}-progress .bar").stop().animate width: new_width
             error: ->
                 $form.remove()
                 $.showError "Drat, something went wrong!"
