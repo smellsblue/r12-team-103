@@ -24,7 +24,8 @@
     display: none;
 }
 
-.can-edit-true .tome-item:hover {
+.can-edit-true .tome-item:hover,
+.can-edit-true .tome-item-clicked {
     padding: 2px;
     background-color: #fdfdfd;
     border: 1px solid #e3e3e3;
@@ -36,7 +37,8 @@
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
-.can-edit-true .tome-item:hover .edit-tome-item {
+.can-edit-true .tome-item:hover .edit-tome-item,
+.can-edit-true .tome-item-clicked .edit-tome-item {
     display: inline-block;
     *display: inline;
     /* IE7 inline-block hack */
@@ -47,6 +49,8 @@
 .character-alignment .edit-tome-item {
     margin-top: -40px;
     float: right;
+    position: relative;
+    z-index: 200;
 }
 
 .form-horizontal .character-attribute .control-group,
@@ -57,6 +61,11 @@
 .form-horizontal .character-attribute .control-label,
 .form-horizontal .character-alignment .control-label {
     margin-top: -5px;
+}
+
+.form-horizontal .character-attribute .tome-item,
+.form-horizontal .character-alignment .tome-item {
+    height: 30px;
 }
 
 form.tome-edit-form {
@@ -79,4 +88,11 @@ form.tome-edit-form {
     position: absolute;
     z-index: 100;
     border-right: 1px solid #000;
+}
+
+@media (max-width: 480px) {
+    .form-horizontal .character-attribute .tome-item,
+    .form-horizontal .character-alignment .tome-item {
+        height: 66px;
+    }
 }

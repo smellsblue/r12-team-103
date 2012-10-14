@@ -24,7 +24,7 @@ $.fn.gain = (message) ->
         </div>"
     location = @.offset()
     $gain.css
-        position: "absolute"
+        position: "fixed"
         "z-index": 1000
         left: location.left
         top: location.top
@@ -41,18 +41,40 @@ $.checkLevel = (server_result) ->
         $(".character-level").text server_result.new_level_label
     if server_result.levels_gained?
         if server_result.levels_gained == 1
-            $(".character-level").gain "+#{server_result.levels_gained} level"
+            $(".character-level").gain "+#{server_result.levels_gained}&nbsp;level"
         else if server_result.levels_gained > 1
-            $(".character-level").gain "+#{server_result.levels_gained} levels"
+            $(".character-level").gain "+#{server_result.levels_gained}&nbsp;levels"
 
 $.checkXp = (server_result) ->
     if server_result.new_xp_total?
         $(".character-xp").text "#{server_result.new_xp_total} xp"
     if server_result.xp_gained? && server_result.xp_gained > 0
-        $(".character-xp").gain "+#{server_result.xp_gained} xp"
+        $(".character-xp").gain "+#{server_result.xp_gained}&nbsp;xp"
+
+$.showError = (message) ->
+    $modal = $ "<div class='modal hide fade'>
+          <div class='modal-header'>
+            <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+            <h3>An Error Occurred</h3>
+          </div>
+          <div class='modal-body'>
+            <p>#{message}</p>
+          </div>
+          <div class='modal-footer'>
+            <button data-dismiss='modal' class='btn' aria-hidden='true'>Dismiss</button>
+          </div>
+        </div>"
+    $("body").append $modal
+    $modal.on "hidden", ->
+        $modal.remove()
+    $modal.modal()
 
 $ ->
     if $.canEdit()
+        $(".tome-item").click ->
+            wasClicked = $(@).is ".tome-item-clicked"
+            $(".tome-item-clicked").removeClass "tome-item-clicked"
+            $(@).addClass "tome-item-clicked" unless wasClicked
         $("a.edit-tome-item").each ->
             target = $(@).data "for"
             $target = $ "##{target}-value"
@@ -63,7 +85,6 @@ $ ->
                   <input type='text' name='value' placeholder='#{placeholder}' />
                 </form>"
             $input = $form.find "input[name='value']"
-            $input.val $target.data("original-value")
             $form.submit ->
                 $.ajax "/tomes/#{$("#tome_id").val()}",
                     type: "POST"
@@ -71,18 +92,23 @@ $ ->
                     success: (result) ->
                         if result.new_value?.length
                             $target.text result.new_value
+                            $target.attr "data-original-value", result.new_value
                         else
                             $target.text placeholder
+                            $target.attr "data-original-value", ""
                         $form.hide()
                         $target.show()
                         $.checkLevel result
                         $.checkXp result
                     error: ->
-                        # TODO
+                        $form.hide()
+                        $target.show()
+                        $.showError "Drat, something went wrong!"
                 false
             $target.after $form
             $(@).click ->
                 $target.hide()
+                $input.val $target.attr("data-original-value")
                 $form.show()
                 $input.focus()
                 false
