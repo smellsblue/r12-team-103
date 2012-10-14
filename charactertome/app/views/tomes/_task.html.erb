@@ -1,8 +1,6 @@
 <div class="row-fluid task">
   <div class="span6 task-<%= task.id %> <%= task.completed_status %>">
-    <label>
-      <button class="btn btn-mini toggle-task task-<%= task.id %>-btn" data-toggle-task-path="<%= tome_goal_task_path @tome.id, task.goal.id, task.id %>" data-task-id="<%= task.id %>"><i class="icon-ok"></i></button>
-      <span class="task-label"><%= task.label %></span>
-    </label>
+    <button id="task-<%= task.id %>-btn" class="btn btn-mini toggle-task task-<%= task.id %>-btn <%= "btn-success" if task.accomplished %>" data-toggle-task-path="<%= tome_goal_task_path @tome.id, task.goal.id, task.id %>" data-task-id="<%= task.id %>"><i class="icon-ok"></i></button>
+    <label for="task-<%= task.id %>-btn" class="task-label"><%= task.label %></label>
   </div>
 </div>

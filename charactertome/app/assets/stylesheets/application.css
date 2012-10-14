@@ -98,6 +98,10 @@ form.tome-edit-form {
     color: #468847;
 }
 
+.task-label {
+    display: inline;
+}
+
 @media (max-width: 480px) {
     .form-horizontal .character-attribute .tome-item,
     .form-horizontal .character-alignment .tome-item {
