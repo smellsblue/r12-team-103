@@ -15,7 +15,8 @@ class WeaponsController < ApplicationController
   end
 
   def update
-    render :json => {}
+    raise "Weapon is required!" unless @weapon
+    render :json => @tome.update_weapon!(@weapon, params)
   end
 
   private

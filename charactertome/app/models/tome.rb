@@ -77,6 +77,18 @@ class Tome < ActiveRecord::Base
     { :weapon => weapon }
   end
 
+  def update_weapon!(weapon, params)
+    if params[:attribute] == "label"
+      weapon.label = params[:value]
+      weapon.save!
+      return { :new_value => weapon.label }
+    else
+      raise "What are you trying to update?"
+    end
+
+    {}
+  end
+
   def create_goal!(params)
     goal = goals.create :label => params[:label]
     { :goal => goal }
