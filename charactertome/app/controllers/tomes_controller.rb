@@ -12,8 +12,15 @@ class TomesController < ApplicationController
 
   def update
     tome = Tome.find params[:id]
-    raise "You do not have permission!" if session[:user_id].to_i != tome.owner.id
-    render :json => tome.update_value!(params)
+    raise "You do not have permission!" if session[:user_id].to_i != tome.owner_id
+    result = tome.update_value!(params)
+    return redirect_to tome_path(tome.id) if params[:redirect] == "true"
+    render :json => result
+  end
+
+  def update_pic
+    @tome = Tome.find params[:id]
+    raise "You do not have permission!" if session[:user_id].to_i != @tome.owner_id
   end
 
   private

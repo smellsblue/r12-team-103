@@ -15,6 +15,10 @@
 #= require twitter/bootstrap
 #= require_tree .
 
+$.rumble = () ->
+    $("#rumble-target").append "
+        <a href='http://railsrumble.com/?view=#{document.location}'>Vote for us</a>\nin the <a href='http://railsrumble.com'>2012 Rails Rumble</a>!"
+
 $.canEdit = () ->
     $("#can_edit").val() == "true"
 
@@ -351,6 +355,7 @@ $.setupEditWeapon = () ->
         false
 
 $ ->
+    $.rumble()
     if $.canEdit()
         $.setupEdits()
         $.setupBarControls()
