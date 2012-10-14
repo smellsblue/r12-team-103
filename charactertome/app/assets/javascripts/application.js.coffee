@@ -72,8 +72,9 @@ $.showError = (message) ->
 $ ->
     if $.canEdit()
         $(".tome-item").click ->
+            wasClicked = $(@).is ".tome-item-clicked"
             $(".tome-item-clicked").removeClass "tome-item-clicked"
-            $(@).addClass "tome-item-clicked"
+            $(@).addClass "tome-item-clicked" unless wasClicked
         $("a.edit-tome-item").each ->
             target = $(@).data "for"
             $target = $ "##{target}-value"

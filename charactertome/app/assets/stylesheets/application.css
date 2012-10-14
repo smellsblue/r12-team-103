@@ -63,6 +63,11 @@
     margin-top: -5px;
 }
 
+.form-horizontal .character-attribute .tome-item,
+.form-horizontal .character-alignment .tome-item {
+    height: 30px;
+}
+
 form.tome-edit-form {
     display: inline;
     margin: 0;
@@ -83,4 +88,11 @@ form.tome-edit-form {
     position: absolute;
     z-index: 100;
     border-right: 1px solid #000;
+}
+
+@media (max-width: 480px) {
+    .form-horizontal .character-attribute .tome-item,
+    .form-horizontal .character-alignment .tome-item {
+        height: 66px;
+    }
 }
