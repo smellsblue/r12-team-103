@@ -131,9 +131,6 @@ $.createForm = (method, content, cancelCallback) ->
     $form.find(".cancel-button").click ->
         cancelCallback?()
         false
-    $form.find(".submit-button").click ->
-        $form.submit()
-        false
     $form
 
 $.setupEdits = () ->
