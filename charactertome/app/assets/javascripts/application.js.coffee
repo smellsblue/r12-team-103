@@ -39,6 +39,8 @@ $.fn.gain = (message) ->
 $.standardChecks = (server_result) ->
     $.checkLevel server_result
     $.checkXp server_result
+    $.checkGoal server_result
+    $.checkTask server_result
 
 $.checkLevel = (server_result) ->
     if server_result.new_level_label?
@@ -55,15 +57,30 @@ $.checkXp = (server_result) ->
     if server_result.xp_gained? && server_result.xp_gained > 0
         $(".character-xp").gain "+#{server_result.xp_gained}&nbsp;xp"
 
-$.checkGoal = (server_result, goal_id) ->
-    if server_result.goal_completed_percent?
-        new_width = $(".goal-#{goal_id}-progress").width() * (server_result.goal_completed_percent / 100.0)
-        $(".goal-#{goal_id}-progress .bar").stop().animate width: new_width
+$.checkGoal = (server_result) ->
+    if server_result.goal_completed_percent? && server_result.goal_id?
+        new_width = $(".goal-#{server_result.goal_id}-progress").width() * (server_result.goal_completed_percent / 100.0)
+        $(".goal-#{server_result.goal_id}-progress .bar").stop().animate width: new_width
 
         if server_result.goal_completed_percent == 100
-            $(".goal-#{goal_id} .goal-label").addClass("text-success")
+            $(".goal-#{server_result.goal_id} .goal-label").addClass("text-success")
         else
-            $(".goal-#{goal_id} .goal-label").removeClass("text-success")
+            $(".goal-#{server_result.goal_id} .goal-label").removeClass("text-success")
+
+    if server_result.html? && server_result.goal_id_for_new_task?
+        $("#new-tasks-for-#{server_result.goal_id_for_new_task}").append server_result.html
+
+    if server_result.new_goal_html?
+        $("#new-goals").append server_result.new_goal_html
+
+$.checkTask = (server_result) ->
+    if server_result.task_completed_status == "completed" && server_result.completed_task_id?
+        $(".task-#{server_result.completed_task_id}").removeClass("not_completed").addClass("completed")
+        $(".task-#{server_result.completed_task_id}-btn").addClass("btn-success")
+    else if server_result.task_completed_status == "not_completed"
+        $(".task-#{server_result.completed_task_id}").removeClass("completed").addClass("not_completed")
+        $(".task-#{server_result.completed_task_id}-btn").removeClass("btn-success")
+
 
 $.showError = (message) ->
     $modal = $ "<div class='modal hide fade'>
@@ -131,6 +148,43 @@ $.setupEdits = () ->
         $input.focus()
         false
 
+$.setupDeletes = () ->
+    $(document).on "click", ".delete-tome-item", ->
+        target = $(@).data "for"
+        $target = $ "##{target}"
+        $modal = $ "<div class='modal hide fade'>
+              <div class='modal-header'>
+                <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
+                <h3>Are You Sure?</h3>
+              </div>
+              <div class='modal-body'>
+                <p>Are you sure you want to delete that?</p>
+              </div>
+              <div class='modal-footer'>
+                <button data-dismiss='modal' class='btn' aria-hidden='true'>Dismiss</button>
+                <button class='btn btn-danger delete-item'>Delete</button>
+              </div>
+            </div>"
+        $modal.find(".delete-item").click ->
+            $form = $.createForm "DELETE", ""
+            $.ajax $target.data("delete-path"),
+                type: "POST"
+                data: $form.serialize()
+                success: (result) ->
+                    $form.remove()
+                    $modal.modal "hide"
+                    $.standardChecks result
+                    $target.remove()
+                error: ->
+                    $form.remove()
+                    $modal.modal "hide"
+                    $.showError "Drat, something went wrong!"
+        $("body").append $modal
+        $modal.on "hidden", ->
+            $modal.remove()
+        $modal.modal()
+        false
+
 $.setupNewGoal = () ->
     $(document).on "click", ".create-goal", ->
         $form = $.createForm "POST", "
@@ -146,7 +200,6 @@ $.setupNewGoal = () ->
                     $form.remove()
                     $br.remove()
                     $.standardChecks result
-                    $("#new-goals").append result.html if result.html?
                 error: ->
                     $form.remove()
                     $br.remove
@@ -165,7 +218,6 @@ $.setupGoals = () ->
 
 $.setupNewTask = () ->
     $(document).on "click", ".create-task", ->
-        goal_id = $(@).data "goal-id"
         new_task_path = $(@).data "new-task-path"
         $form = $.createForm "POST", "
             <input type='text' name='label' placeholder='a task towards this goal' />"
@@ -180,8 +232,6 @@ $.setupNewTask = () ->
                     $form.remove()
                     $br.remove()
                     $.standardChecks result
-                    $.checkGoal result, goal_id
-                    $("#new-tasks-for-#{goal_id}").append result.html if result.html?
                 error: ->
                     $form.remove()
                     $br.remove()
@@ -194,8 +244,6 @@ $.setupNewTask = () ->
 
 $.setupToggleTasks = () ->
     $(document).on "click", ".toggle-task", ->
-        goal_id = $(@).data "goal-id"
-        task_id = $(@).data "task-id"
         $form = $.createForm "PUT", "
             <input type='hidden' name='toggle' value='true' />"
         $(@).before $form
@@ -205,14 +253,6 @@ $.setupToggleTasks = () ->
             success: (result) ->
                 $form.remove()
                 $.standardChecks result
-                $.checkGoal result, goal_id
-
-                if result.task_completed_status == "completed"
-                    $(".task-#{task_id}").removeClass("not_completed").addClass("completed")
-                    $(".task-#{task_id}-btn").addClass("btn-success")
-                else if result.task_completed_status == "not_completed"
-                    $(".task-#{task_id}").removeClass("completed").addClass("not_completed")
-                    $(".task-#{task_id}-btn").removeClass("btn-success")
             error: ->
                 $form.remove()
                 $.showError "Drat, something went wrong!"
@@ -221,6 +261,7 @@ $.setupToggleTasks = () ->
 $ ->
     if $.canEdit()
         $.setupEdits()
+        $.setupDeletes()
         $.setupNewGoal()
         $.setupGoals()
         $.setupNewTask()
