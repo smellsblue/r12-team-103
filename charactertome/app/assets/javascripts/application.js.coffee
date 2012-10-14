@@ -81,7 +81,6 @@ $.checkTask = (server_result) ->
         $(".task-#{server_result.completed_task_id}").removeClass("completed").addClass("not_completed")
         $(".task-#{server_result.completed_task_id}-btn").removeClass("btn-success")
 
-
 $.showError = (message) ->
     $modal = $ "<div class='modal hide fade'>
           <div class='modal-header'>
@@ -152,6 +151,11 @@ $.setupDeletes = () ->
     $(document).on "click", ".delete-tome-item", ->
         target = $(@).data "for"
         $target = $ "##{target}"
+
+        if $target.is(".goal") && $target.find(".not_completed").size() > 0
+            $.showError "You must finish or delete all uncompleted tasks first!"
+            return false
+
         $modal = $ "<div class='modal hide fade'>
               <div class='modal-header'>
                 <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
