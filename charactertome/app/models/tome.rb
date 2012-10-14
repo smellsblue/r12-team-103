@@ -36,30 +36,55 @@ class Tome < ActiveRecord::Base
   def update_value!(params)
     value = params[:value]
     value = nil if params[:value].blank?
+    additional = {}
 
-    case params[:attribute]
-    when "profession"
-      value = self.profession = value || profession
-    when "name"
-      value = self.name = value || name
-    when "intelligence"
-      value = self.intelligence = value || intelligence
-    when "charisma"
-      value = self.charisma = value || charisma
-    when "strength"
-      value = self.strength = value || strength
-    when "wisdom"
-      value = self.wisdom = value || wisdom
-    when "will"
-      value = self.will = value || will
-    when "confidence"
-      value = self.confidence = value || confidence
-    when "morality"
-      value = self.morality = value || morality
-    when "ethics"
-      value = self.ethics = value || ethics
+    if params[:attribute].present?
+      case params[:attribute]
+      when "profession"
+        value = self.profession = value || profession
+      when "name"
+        value = self.name = value || name
+      else
+        raise "Not allowed to update #{params[:attribute]}"
+      end
+    elsif params[:bar_attribute].present?
+      case params[:adjustment]
+      when "decrease"
+        value = -1
+      when "fast_decrease"
+        value = -10
+      when "increase"
+        value = 1
+      when "fast_increase"
+        value = 10
+      else
+        raise "Adjust that by what?"
+      end
+
+      case params[:bar_attribute]
+      when "intelligence"
+        value = self.intelligence = fix_bar_value((intelligence || 0) + value)
+      when "charisma"
+        value = self.charisma = fix_bar_value((charisma || 0) + value)
+      when "strength"
+        value = self.strength = fix_bar_value((strength || 0) + value)
+      when "wisdom"
+        value = self.wisdom = fix_bar_value((wisdom || 0) + value)
+      when "will"
+        value = self.will = fix_bar_value((will || 0) + value)
+      when "confidence"
+        value = self.confidence = fix_bar_value((confidence || 0) + value)
+      when "morality"
+        value = self.morality = fix_bar_value((morality || 50) + value)
+        additional = { :new_morality => value_of("morality_label", :alignment_label) }
+      when "ethics"
+        value = self.ethics = fix_bar_value((ethics || 50) + value)
+        additional = { :new_ethics => value_of("ethics_label", :alignment_label) }
+      else
+        raise "Not allowed to update #{params[:bar_attribute]}"
+      end
     else
-      raise "Not allowed to update #{params[:attribute]}"
+      raise "What are you trying to update?"
     end
 
     save!
@@ -69,7 +94,7 @@ class Tome < ActiveRecord::Base
       xp_gained += xp
     end
 
-    result = { :new_value => value, :xp_gained => xp_gained, :new_xp_total => xp_total, :levels_gained => levels_gained, :new_level => level, :new_level_label => level.ordinalize }
+    result = { :new_value => value, :xp_gained => xp_gained, :new_xp_total => xp_total, :levels_gained => levels_gained, :new_level => level, :new_level_label => level.ordinalize }.merge(additional)
   end
 
   def create_weapon!(params)
@@ -191,6 +216,16 @@ class Tome < ActiveRecord::Base
   end
 
   private
+  def fix_bar_value(value)
+    if value < 0
+      0
+    elsif value > 100
+      100
+    else
+      value
+    end
+  end
+
   def check_for_new_xp_and_levels
     check_xp! unless new_record?
     check_levels!
