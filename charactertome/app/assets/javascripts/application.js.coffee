@@ -69,46 +69,60 @@ $.showError = (message) ->
         $modal.remove()
     $modal.modal()
 
+$.createForm = (method, id, content) ->
+    $form = $ "<form class='tome-edit-form' id='#{id}' style='display: none;'>
+          <input type='hidden' name='_method' value='#{method}' />
+          <input type='hidden' name='authenticity_token' />
+          #{content}
+        </form>"
+    $form.find("input[name='authenticity_token']").val $("meta[name='csrf-token']").attr("content")
+    $form
+
+$.setupEdits = () ->
+    $(".tome-item").click ->
+        wasClicked = $(@).is ".tome-item-clicked"
+        $(".tome-item-clicked").removeClass "tome-item-clicked"
+        $(@).addClass "tome-item-clicked" unless wasClicked
+    $("a.edit-tome-item").each ->
+        target = $(@).data "for"
+        $target = $ "##{target}-value"
+        placeholder = $target.data "input-placeholder"
+        $form = $.createForm "PUT", "form-for-#{target}", "
+            <input type='hidden' name='attribute' value='#{target}' />
+            <input type='text' name='value' placeholder='#{placeholder}' />"
+        $input = $form.find "input[name='value']"
+        $form.submit ->
+            $.ajax "/tomes/#{$("#tome_id").val()}",
+                type: "POST"
+                data: $(@).serialize()
+                success: (result) ->
+                    if result.new_value?.length
+                        $target.text result.new_value
+                        $target.attr "data-original-value", result.new_value
+                    else
+                        $target.text placeholder
+                        $target.attr "data-original-value", ""
+                    $form.hide()
+                    $target.show()
+                    $.checkLevel result
+                    $.checkXp result
+                error: ->
+                    $form.hide()
+                    $target.show()
+                    $.showError "Drat, something went wrong!"
+            false
+        $target.after $form
+        $(@).click ->
+            $target.hide()
+            $input.val $target.attr("data-original-value")
+            $form.show()
+            $input.focus()
+            false
+
+$.setupNewGoal = () ->
+    false
+
 $ ->
     if $.canEdit()
-        $(".tome-item").click ->
-            wasClicked = $(@).is ".tome-item-clicked"
-            $(".tome-item-clicked").removeClass "tome-item-clicked"
-            $(@).addClass "tome-item-clicked" unless wasClicked
-        $("a.edit-tome-item").each ->
-            target = $(@).data "for"
-            $target = $ "##{target}-value"
-            placeholder = $target.data "input-placeholder"
-            $form = $ "<form class='tome-edit-form' id='form-for-#{target}' style='display: none;'>
-                  <input type='hidden' name='_method' value='PUT' />
-                  <input type='hidden' name='attribute' value='#{target}' />
-                  <input type='text' name='value' placeholder='#{placeholder}' />
-                </form>"
-            $input = $form.find "input[name='value']"
-            $form.submit ->
-                $.ajax "/tomes/#{$("#tome_id").val()}",
-                    type: "POST"
-                    data: $(@).serialize()
-                    success: (result) ->
-                        if result.new_value?.length
-                            $target.text result.new_value
-                            $target.attr "data-original-value", result.new_value
-                        else
-                            $target.text placeholder
-                            $target.attr "data-original-value", ""
-                        $form.hide()
-                        $target.show()
-                        $.checkLevel result
-                        $.checkXp result
-                    error: ->
-                        $form.hide()
-                        $target.show()
-                        $.showError "Drat, something went wrong!"
-                false
-            $target.after $form
-            $(@).click ->
-                $target.hide()
-                $input.val $target.attr("data-original-value")
-                $form.show()
-                $input.focus()
-                false
+        $.setupEdits()
+        $.setupNewGoal()

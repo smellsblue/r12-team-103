@@ -50,4 +50,10 @@
   <% @tome.goals.each do |goal| %>
     <%= render :partial => "goal", :object => goal %>
   <% end %>
+
+  <% if can_edit? %>
+    <div class="row-fluid">
+      <input id="create-goal" class="btn btn-primary" type="button" value="New Goal" data-create-path="<%= tome_goals_path(@tome.id) %>" />
+    </div>
+  <% end %>
 </div>
