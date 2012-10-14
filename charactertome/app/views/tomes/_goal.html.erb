@@ -19,6 +19,10 @@
   </div>
 
   <div id="tasks-for-<%= goal.id %>" class="collapse tasks">
+    <% goal.tasks.each do |task| %>
+      <%= render :partial => "task", :object => task %>
+    <% end %>
+
     <% if can_edit? %>
       <div class="row-fluid">
         <input class="btn create-task" type="button" value="New Task" />
