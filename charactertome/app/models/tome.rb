@@ -23,6 +23,10 @@ class Tome < ActiveRecord::Base
     :profession => "Nerdist"
   }.freeze
 
+  def image
+    "character#{(id % 5) + 1}.png"
+  end
+
   def xp_total
     experiences.sum &:value
   end
