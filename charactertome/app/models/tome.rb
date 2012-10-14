@@ -68,14 +68,6 @@ class Tome < ActiveRecord::Base
       xp_gained += xp
     end
 
-    level_change = previous_changes["level"]
-
-    if level_change
-      levels_gained = level_change[1] - level_change[0]
-    else
-      levels_gained = 0
-    end
-
     result = { :new_value => value, :xp_gained => xp_gained, :new_xp_total => xp_total, :levels_gained => levels_gained, :new_level => level, :new_level_label => level.ordinalize }
   end
 
@@ -107,6 +99,17 @@ class Tome < ActiveRecord::Base
         task.unaccomplish!
       else
         task.accomplish!
+        gain_for_this_task = gain_referenced_unique_xp? "You completed a task.", 25, "task", task.id
+        gain_for_this_goal = gain_referenced_unique_xp? "You completed a goal.", 100, "goal", task.goal_id
+
+        if gain_for_this_task || gain_for_this_goal
+          check_levels!
+          save! if level_changed?
+          amount = 0
+          amount += 25 if gain_for_this_task
+          amount += 100 if gain_for_this_goal
+          return { :xp_gained => amount, :new_xp_total => xp_total, :levels_gained => levels_gained, :new_level => level, :new_level_label => level.ordinalize }
+        end
       end
     elsif params[:attribute] == "label"
       task.label = params[:value]
@@ -117,6 +120,22 @@ class Tome < ActiveRecord::Base
     end
 
     {}
+  end
+
+  def levels_gained
+    level_change = previous_changes["level"]
+
+    if level_change
+      level_change[1] - level_change[0]
+    else
+      0
+    end
+  end
+
+  def gain_referenced_unique_xp?(label, value, source_type, ref_id)
+    return false if experiences.where(:reference_id => ref_id, :source_type => source_type).count > 0
+    experiences.create :label => label, :value => value, :source_type => source_type, :reference_id => ref_id
+    true
   end
 
   def morality_label
