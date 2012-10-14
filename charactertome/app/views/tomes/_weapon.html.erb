@@ -1,0 +1,7 @@
+<div id="weapon-<%= weapon.id %>" class="row-fluid weapon" data-delete-path="<%= tome_weapon_path @tome.id, weapon.id %>">
+  <div class="span4 weapon-<%= weapon.id %> tome-item">
+    <span id="weapon-<%= weapon.id %>-value" class="weapon-label" data-original-value="<%= weapon.label %>" data-input-placeholder="a skill you have" data-edit-path="<%= tome_weapon_path @tome.id, weapon.id %>" data-edit-field="label"><%= weapon.label %></span>
+    <%= render :partial => "/tomes/delete_button", :object => "weapon-#{weapon.id}" %>
+    <%= render :partial => "/tomes/edit_button", :object => "weapon-#{weapon.id}" %>
+  </div>
+</div>

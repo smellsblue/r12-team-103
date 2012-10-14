@@ -41,6 +41,7 @@ $.standardChecks = (server_result) ->
     $.checkXp server_result
     $.checkGoal server_result
     $.checkTask server_result
+    $.checkWeapon server_result
 
 $.checkLevel = (server_result) ->
     if server_result.new_level_label?
@@ -80,6 +81,10 @@ $.checkTask = (server_result) ->
     else if server_result.task_completed_status == "not_completed"
         $(".task-#{server_result.completed_task_id}").removeClass("completed").addClass("not_completed")
         $(".task-#{server_result.completed_task_id}-btn").removeClass("btn-success")
+
+$.checkWeapon = (server_result) ->
+    if server_result.new_weapon_html?
+        $("#new-weapons").append server_result.new_weapon_html
 
 $.showError = (message) ->
     $modal = $ "<div class='modal hide fade'>

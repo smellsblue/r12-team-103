@@ -72,6 +72,11 @@ class Tome < ActiveRecord::Base
     result = { :new_value => value, :xp_gained => xp_gained, :new_xp_total => xp_total, :levels_gained => levels_gained, :new_level => level, :new_level_label => level.ordinalize }
   end
 
+  def create_weapon!(params)
+    weapon = weapons.create :label => params[:label]
+    { :weapon => weapon }
+  end
+
   def create_goal!(params)
     goal = goals.create :label => params[:label]
     { :goal => goal }

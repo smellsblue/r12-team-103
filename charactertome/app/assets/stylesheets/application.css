@@ -27,7 +27,9 @@
 .task .delete-tome-item,
 .goal-label .delete-tome-item,
 .task .edit-tome-item,
-.goal-label .edit-tome-item {
+.goal-label .edit-tome-item,
+.weapon .edit-tome-item,
+.weapon .delete-tome-item {
     float: right;
 }
 
