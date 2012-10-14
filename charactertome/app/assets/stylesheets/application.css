@@ -35,11 +35,28 @@
     float: right;
 }
 
+.character-attribute .btn,
+.character-alignment .btn,
 .tome-item .edit-tome-item,
 .tome-item .delete-tome-item,
 .tome-item .increase-tome-item,
 .tome-item .decrease-tome-item {
     display: none;
+}
+
+.character-attribute .fast-decrease-attr,
+.character-alignment .fast-decrease-attr {
+    right: 78px;
+}
+
+.character-attribute .decrease-attr,
+.character-alignment .decrease-attr {
+    right: 56px;
+}
+
+.character-attribute .increase-attr,
+.character-alignment .increase-attr {
+    right: 34px;
 }
 
 .can-edit-true .tome-item:hover,
@@ -55,6 +72,10 @@
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
+.can-edit-true .character-attribute .tome-item:hover .btn,
+.can-edit-true .character-attribute .tome-item-clicked .btn,
+.can-edit-true .character-alignment .tome-item:hover .btn,
+.can-edit-true .character-alignment .tome-item-clicked .btn,
 .can-edit-true .tome-item:hover .edit-tome-item,
 .can-edit-true .tome-item-clicked .edit-tome-item,
 .can-edit-true .tome-item:hover .delete-tome-item,
@@ -70,8 +91,8 @@
     *zoom: 1;
 }
 
-.character-attribute .edit-tome-item,
-.character-alignment .edit-tome-item {
+.character-attribute .btn,
+.character-alignment .btn {
     margin-top: -40px;
     float: right;
     position: relative;
