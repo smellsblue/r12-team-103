@@ -6,7 +6,8 @@ class TasksController < ApplicationController
     raise "That is not the right goal id!" if goal.tome_id != @tome.id
     result = @tome.create_task! goal, params
     render :json => {
-      :html => render_to_string(:partial => "/tomes/task", :object => result[:task], :format => :html)
+      :html => render_to_string(:partial => "/tomes/task", :object => result[:task], :format => :html),
+      :goal_completed_percent => goal.accomplished_percent
     }
   end
 

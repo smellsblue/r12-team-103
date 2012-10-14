@@ -55,6 +55,11 @@ $.checkXp = (server_result) ->
     if server_result.xp_gained? && server_result.xp_gained > 0
         $(".character-xp").gain "+#{server_result.xp_gained}&nbsp;xp"
 
+$.checkGoal = (server_result, goal_id) ->
+    if server_result.goal_completed_percent?
+        new_width = $(".goal-#{goal_id}-progress").width() * (server_result.goal_completed_percent / 100.0)
+        $(".goal-#{goal_id}-progress .bar").stop().animate width: new_width
+
 $.showError = (message) ->
     $modal = $ "<div class='modal hide fade'>
           <div class='modal-header'>
@@ -170,6 +175,7 @@ $.setupNewTask = () ->
                     $form.remove()
                     $br.remove()
                     $.standardChecks result
+                    $.checkGoal result, goal_id
                     $("#new-tasks-for-#{goal_id}").append result.html if result.html?
                 error: ->
                     $form.remove()
@@ -194,6 +200,7 @@ $.setupToggleTasks = () ->
             success: (result) ->
                 $form.remove()
                 $.standardChecks result
+                $.checkGoal result, goal_id
 
                 if result.task_completed_status == "completed"
                     $(".task-#{task_id}").removeClass("not_completed").addClass("completed")
@@ -201,10 +208,6 @@ $.setupToggleTasks = () ->
                 else if result.task_completed_status == "not_completed"
                     $(".task-#{task_id}").removeClass("completed").addClass("not_completed")
                     $(".task-#{task_id}-btn").removeClass("btn-success")
-
-                if result.goal_completed_percent?
-                    new_width = $(".goal-#{goal_id}-progress").width() * (result.goal_completed_percent / 100.0)
-                    $(".goal-#{goal_id}-progress .bar").stop().animate width: new_width
             error: ->
                 $form.remove()
                 $.showError "Drat, something went wrong!"
