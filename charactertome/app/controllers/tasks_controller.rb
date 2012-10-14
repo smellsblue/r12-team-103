@@ -11,6 +11,6 @@ class TasksController < ApplicationController
   end
 
   def update
-    render :json => {}
+    render :json => { :task_completed_status => "completed" }
   end
 end

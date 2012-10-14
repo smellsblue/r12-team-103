@@ -181,9 +181,33 @@ $.setupNewTask = () ->
         $input.focus()
         false
 
+$.setupToggleTasks = () ->
+    $(document).on "click", ".toggle-task", ->
+        task_id = $(@).data "task-id"
+        $form = $.createForm "PUT", "
+            <input type='hidden' name='toggle' value='true' />"
+        $(@).before $form
+        $.ajax $(@).data("toggle-task-path"),
+            type: "POST"
+            data: $form.serialize()
+            success: (result) ->
+                $form.remove()
+                $.standardChecks result
+                if result.task_completed_status == "completed"
+                    $(".task-#{task_id}").removeClass("not_completed").addClass("completed")
+                    $(".task-#{task_id}-btn").addClass("btn-success")
+                else if result.task_completed_status == "not_completed"
+                    $(".task-#{task_id}").removeClass("completed").addClass("not_completed")
+                    $(".task-#{task_id}-btn").removeClass("btn-success")
+            error: ->
+                $form.remove()
+                $.showError "Drat, something went wrong!"
+        false
+
 $ ->
     if $.canEdit()
         $.setupEdits()
         $.setupNewGoal()
         $.setupGoals()
         $.setupNewTask()
+        $.setupToggleTasks()

@@ -94,6 +94,10 @@ form.tome-edit-form {
     border-right: 1px solid #000;
 }
 
+.task .completed {
+    color: #468847;
+}
+
 @media (max-width: 480px) {
     .form-horizontal .character-attribute .tome-item,
     .form-horizontal .character-alignment .tome-item {
