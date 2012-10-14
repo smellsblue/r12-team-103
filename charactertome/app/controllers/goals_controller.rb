@@ -17,7 +17,8 @@ class GoalsController < ApplicationController
   end
 
   def update
-    render :json => {}
+    raise "Goal is required!" unless @goal
+    render :json => @tome.update_goal!(@goal, params)
   end
 
   private
