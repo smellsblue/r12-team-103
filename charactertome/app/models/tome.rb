@@ -5,6 +5,7 @@ class Tome < ActiveRecord::Base
   belongs_to :owner, :class_name => "User"
   has_many :experiences
   has_many :goals
+  has_many :weapons
   before_save :check_for_new_xp_and_levels
 
   validates_each :intelligence, :charisma, :strength, :wisdom, :will, :confidence, :morality, :ethics do |record, attr, value|

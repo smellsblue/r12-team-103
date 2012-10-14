@@ -60,4 +60,19 @@
       <input class="btn btn-primary create-goal" type="button" value="New Goal" />
     </div>
   <% end %>
+
+  <h2>Weapons</h2>
+
+  <% @tome.weapons.each do |weapon| %>
+    <%= render :partial => "weapon", :object => weapon %>
+  <% end %>
+
+  <div id="new-weapons">
+  </div>
+
+  <% if can_edit? %>
+    <div class="row-fluid">
+      <input class="btn btn-primary create-weapon" type="button" value="New Weapon" />
+    </div>
+  <% end %>
 </div>
