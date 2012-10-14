@@ -2,6 +2,14 @@
   <li class="span10">
     <div class="thumbnail">
       <%= image_tag @tome.image %>
+
+      <% if can_edit? %>
+        <div class="caption">
+          <center>
+            <a href="<%= update_pic_tome_path @tome.id %>" class="btn">Change</a>
+          </center>
+        </div>
+      <% end %>
     </div>
   </li>
 </ul>

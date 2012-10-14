@@ -1,0 +1,28 @@
+<h1>
+  Choose or upload your character:
+</h1>
+
+<h3>
+  Default Options:
+</h3>
+
+<ul class="thumbnails">
+  <% 1.upto Tome::MAX_DEFAULT_CHARACTER_IMAGE do |i| %>
+    <li class="span2">
+        <a class="thumbnail">
+          <%= image_tag "character#{i}.png" %>
+
+          <div class="caption">
+            <center>
+              <%= form_tag tome_path(@tome.id), :method => :put do %>
+                <input type="hidden" name="redirect" value="true" />
+                <input type="hidden" name="attribute" value="default_pic" />
+                <input type="hidden" name="value" value="<%= i %>" />
+                <input class="btn" type="submit" value="Select" />
+              <% end %>
+            </center>
+          </div>
+        </a>
+    </li>
+  <% end %>
+</ul>

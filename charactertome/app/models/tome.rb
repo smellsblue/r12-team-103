@@ -15,6 +15,8 @@ class Tome < ActiveRecord::Base
     end
   end
 
+  MAX_DEFAULT_CHARACTER_IMAGE = 5
+
   DEFAULTS = {
     :alignment => 50,
     :alignment_label => "Unknown",
@@ -24,7 +26,11 @@ class Tome < ActiveRecord::Base
   }.freeze
 
   def image
-    "character#{(id % 5) + 1}.png"
+    if default_pic && (1..MAX_DEFAULT_CHARACTER_IMAGE).include?(default_pic)
+      "character#{default_pic}.png"
+    else
+      "character#{(id % MAX_DEFAULT_CHARACTER_IMAGE) + 1}.png"
+    end
   end
 
   def xp_total
@@ -48,6 +54,8 @@ class Tome < ActiveRecord::Base
         value = self.profession = value || profession
       when "name"
         value = self.name = value || name
+      when "default_pic"
+        self.default_pic = value.to_i
       else
         raise "Not allowed to update #{params[:attribute]}"
       end
