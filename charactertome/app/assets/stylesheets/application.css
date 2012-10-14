@@ -145,6 +145,10 @@ form.inline-form {
     color: #468847;
 }
 
+.level-up {
+    color: #00BB03;
+}
+
 .task .completed .task-label {
     text-decoration: line-through;
 }
