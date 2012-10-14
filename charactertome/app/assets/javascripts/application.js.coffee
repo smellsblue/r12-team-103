@@ -270,6 +270,31 @@ $.setupToggleTasks = () ->
                 $.showError "Drat, something went wrong!"
         false
 
+$.setupNewWeapon = () ->
+    $(document).on "click", ".create-weapon", ->
+        $form = $.createForm "POST", "
+            <input type='text' name='label' placeholder='a skill you have' />"
+        $br = $ "<br />"
+        $form.after $br
+        $input = $form.find "input[name='label']"
+        $form.submit ->
+            $.ajax $("#create_weapon_path").val(),
+                type: "POST"
+                data: $(@).serialize()
+                success: (result) ->
+                    $form.remove()
+                    $br.remove()
+                    $.standardChecks result
+                error: ->
+                    $form.remove()
+                    $br.remove
+                    $.showError "Drat, something went wrong!"
+            false
+        $(@).before $form
+        $form.show()
+        $input.focus()
+        false
+
 $ ->
     if $.canEdit()
         $.setupEdits()
@@ -278,3 +303,4 @@ $ ->
         $.setupGoals()
         $.setupNewTask()
         $.setupToggleTasks()
+        $.setupNewWeapon()
